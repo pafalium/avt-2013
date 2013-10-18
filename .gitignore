@@ -1,0 +1,6 @@
+
+
+*.sdf
+
+projects/*/obj/*
+projects/bin/*
