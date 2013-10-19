@@ -74,6 +74,9 @@
   <ItemGroup>
     <ClCompile Include="..\src\assignment_2.cpp" />
     <ClCompile Include="..\src\matrices.cpp" />
+    <ClCompile Include="..\src\matrices_tests.cpp" />
+    <ClCompile Include="..\src\Shader.cpp" />
+    <ClCompile Include="..\src\ShaderProgram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\fragment.fsh" />
@@ -81,6 +84,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\matrices.h" />
+    <ClInclude Include="..\src\matrices_tests.h" />
+    <ClInclude Include="..\src\outputStreams.h" />
+    <ClInclude Include="..\src\Shader.h" />
+    <ClInclude Include="..\src\ShaderProgram.h" />
+    <ClInclude Include="..\src\uniformsAttribs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

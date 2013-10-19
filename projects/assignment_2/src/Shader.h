@@ -8,12 +8,17 @@
 class Shader
 {
 public:
-	// Issues the creation of a new shader object to OpenGL.
+	// Initializes client-side object (no OpenGL calls).
+	// This object will only be properly initialized after calling
+	// createShader and then compileShader methods.
 	Shader(GLenum shaderType, const std::string &shaderSource);
 	// Issues destruction of the OpenGL shader object associated with this.
 	~Shader();
 	// Returns OpenGL shader name of this.
 	GLuint shaderName();
+	// Create the new OpenGL shader object and specify it's source.
+	// If shader object was already created nothing is done.
+	void createShader();
 	// Issues GLSL source compilation.
 	// returns GL_COMPILE_STATUS for this shader.
 	GLint compile();

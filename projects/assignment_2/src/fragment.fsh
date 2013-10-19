@@ -1,11 +1,11 @@
 #version 330 core
 //fragment.fsh
 
-in vec4 color;
+in vec4 ex_col;
 
-out vec4 fragmentColor;
+out vec4 out_col;
 
 void main()
 {
-	fragmentColor = color;
+	out_col = color;
 } 

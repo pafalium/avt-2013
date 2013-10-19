@@ -17,11 +17,14 @@ public:
 
 	//this method will NOT verify that indexes are within bounds.
 	const GLfloat &cell(int row, int col) const;
+	//set a column to a given vector of 4 GLfloats
+	void setColumn(int col, const std::vector<GLfloat> &content);
 
 	Matrix4 &operator*=(const Matrix4 &other);
-	const Matrix4 &operator*(const Matrix4 &other) const;
+	const Matrix4 operator*(const Matrix4 &other) const;
 
-	friend std::ostream &operator<< (std::ostream &o, Matrix4 &mat);
+	// Print matrix at row/line pattern.
+	friend std::ostream &operator<< (std::ostream &o, const Matrix4 &mat);
 private:
 	//zero initialize constructor
 	Matrix4();
@@ -31,6 +34,8 @@ private:
 };
 
 namespace Matrices {
+	// Axis-angle rotation matrix. Rodrigues formula.
+	// theta given in radians
 	Matrix4 axisRotate(GLfloat x, GLfloat y, GLfloat z, GLfloat theta);
 	Matrix4 translate(GLfloat dx, GLfloat dy, GLfloat dz);
 	Matrix4 scale(GLfloat sx, GLfloat sy, GLfloat sz);

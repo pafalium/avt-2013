@@ -4,11 +4,33 @@
 
 #include "uniformsAttribs.h"
 
+
+// Creates a new program and its shaders.
 ShaderProgram::ShaderProgram(const std::string &vertexSource, const std::string &fragmentSource)
 : m_vertexShader(GL_VERTEX_SHADER, vertexSource), 
-m_fragmentShader(GL_FRAGMENT_SHADER, fragmentSource)
+m_fragmentShader(GL_FRAGMENT_SHADER, fragmentSource),
+m_programName(0)
+{
+}
+
+
+// Detach shaders, destroy shaders.
+ShaderProgram::~ShaderProgram()
+{
+	glUseProgram(0);
+	glDetachShader(m_programName, m_vertexShader.shaderName());
+	glDetachShader(m_programName, m_fragmentShader.shaderName());
+
+	glDeleteProgram(m_programName);
+}
+
+
+// Create, compile and link program.
+void ShaderProgram::createCompileLink()
 {
 	m_programName = glCreateProgram();
+	m_vertexShader.createShader();
+	m_fragmentShader.createShader();
 
 	// attach shaders
 	glAttachShader(m_programName, m_vertexShader.shaderName());
@@ -30,7 +52,7 @@ m_fragmentShader(GL_FRAGMENT_SHADER, fragmentSource)
 	// fail if some compilation failed
 	OutStreams::ShaderLog << "ERROR: Shader compilation failed" << std::endl;
 
-	// "bind" vertex attribute channels and get uniform ids
+	// "bind" vertex attribute channels
 	for (VertexAttribChannel vac : VertexAttribChannels){
 		glBindAttribLocation(m_programName, vac.attribIndex, vac.attribName.c_str());
 	}
@@ -42,16 +64,6 @@ m_fragmentShader(GL_FRAGMENT_SHADER, fragmentSource)
 
 	// get uniform ids
 	//TODO
-}
-
-
-ShaderProgram::~ShaderProgram()
-{
-	glUseProgram(0);
-	glDetachShader(m_programName, m_vertexShader.shaderName());
-	glDetachShader(m_programName, m_fragmentShader.shaderName());
-
-	glDeleteProgram(m_programName);
 }
 
 GLint ShaderProgram::linkProgram()
@@ -93,4 +105,16 @@ void ShaderProgram::displayShaderCompileLog(const std::string &message, const Sh
 	OutStreams::ShaderLog << message << std::endl;
 	OutStreams::ShaderLog << "Printing info log:" << std::endl;
 	OutStreams::ShaderLog << shader.compileLogInfo() << std::endl;
+}
+
+
+void ShaderProgram::use()
+{
+	glUseProgram(m_programName);
+}
+
+
+void ShaderProgram::removeFromUse()
+{
+	glUseProgram(0);
 }

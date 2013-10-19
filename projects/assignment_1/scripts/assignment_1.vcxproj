@@ -73,11 +73,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\src\assignment_1.cpp" />
+    <ClCompile Include="Shader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawableTriangle.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="Vec3d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

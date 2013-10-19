@@ -1,6 +1,7 @@
 //matrices.cpp
 
 #include "matrices.h"
+#include <cmath>
 
 /////////////////////////////////////////////// CONSTRUCTORS
 Matrix4::Matrix4(std::vector<GLfloat> elems, bool isElemsRowMajor)
@@ -16,7 +17,7 @@ Matrix4::Matrix4()
 :m_data(16, (GLfloat)0)
 {}
 /////////////////////////////////////////////// OPERATORS
-const Matrix4 &Matrix4::operator*(const Matrix4 &other) const
+const Matrix4 Matrix4::operator*(const Matrix4 &other) const
 {
 	Matrix4 result;
 	int row, col;
@@ -61,9 +62,13 @@ const GLfloat &Matrix4::cell(int row, int col) const
 {
 	return m_data[row * 4 + col];
 }
-
+void Matrix4::setColumn(int col, const std::vector<GLfloat> &content)
+{
+	for (int row = 0; row < 4; ++row)
+		cellRef(row, col) = content[row];
+}
 /////////////////////////////////////////////// FRIENDS
-std::ostream &operator<<(std::ostream &o, Matrix4 &mat)
+std::ostream &operator<<(std::ostream &o, const Matrix4 &mat)
 {
 	//foreach row, fetch elements
 	for (int row = 0; row < 4; ++row){
@@ -85,5 +90,34 @@ namespace Matrices {
 		0, 0, 1, 0,
 		0, 0, 0, 1 };
 		return Matrix4(content);
+	}
+	Matrix4 translate(GLfloat dx, GLfloat dy, GLfloat dz) 
+	{
+		Matrix4 mat = identity();
+		std::vector<GLfloat> transVec = { dx, dy, dz, 1.0f };
+		mat.setColumn(3, transVec);
+
+		return mat;
+	}
+	Matrix4 scale(GLfloat sx, GLfloat sy, GLfloat sz)
+	{
+		std::vector<GLfloat> content =
+		{ sx, 0, 0, 0,
+		0, sy, 0, 0,
+		0, 0, sz, 0,
+		0, 0, 0, 1 };
+		return Matrix4(content);
+	}
+	Matrix4 axisRotate(GLfloat x, GLfloat y, GLfloat z, GLfloat theta)
+	{
+		GLfloat cosThe = cos(theta), sinThe = sin(theta);
+		GLfloat oneSubCos = 1 - cosThe;
+		std::vector<GLfloat> content =
+		{ cosThe + x*x*oneSubCos, x*y*oneSubCos - z*sinThe, x*z*oneSubCos + y*sinThe, 0,
+		x*y*oneSubCos + z*sinThe, cosThe + y*y*oneSubCos, y*z*oneSubCos - x*sinThe, 0,
+		x*z*oneSubCos - y*sinThe, y*z*oneSubCos + x*sinThe, cosThe + z*z*oneSubCos, 0,
+		0, 0, 0, 1};
+
+		return Matrix4(content, true);
 	}
 }

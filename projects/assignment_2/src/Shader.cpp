@@ -2,13 +2,8 @@
 
 
 Shader::Shader(GLenum shaderType, const std::string &shaderSource)
-: m_shaderType(shaderType), m_shaderSource(shaderSource)
+: m_shaderType(shaderType), m_shaderSource(shaderSource), m_shaderName(0)
 {
-	// Create OpenGL shader object
-	m_shaderName = glCreateShader(shaderType);
-	// Send shader source to OpenGL
-	const char *shaderSourceCstr = m_shaderSource.c_str();
-	glShaderSource(m_shaderName, 1, &shaderSourceCstr, 0);
 }
 
 
@@ -16,6 +11,19 @@ Shader::~Shader()
 {
 	// Release OpenGL shader object
 	glDeleteShader(m_shaderName);
+}
+
+
+// Create the new OpenGL shader object and specify it's source.
+void Shader::createShader()
+{
+	if (m_shaderName == 0)
+		return;
+	// Create OpenGL shader object
+	m_shaderName = glCreateShader(m_shaderType);
+	// Send shader source to OpenGL
+	const char *shaderSourceCstr = m_shaderSource.c_str();
+	glShaderSource(m_shaderName, 1, &shaderSourceCstr, 0);
 }
 
 

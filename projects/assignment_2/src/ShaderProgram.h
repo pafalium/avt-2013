@@ -7,23 +7,22 @@
 #include "outputStreams.h"
 #include "Shader.h"
 
+
 class ShaderProgram
 {
 	GLuint m_programName;
 	Shader m_vertexShader;
 	Shader m_fragmentShader;
 public:
-	// Creates a new program and its shaders.
+	// Creates a new program and its shaders (no OpenGL calls).
 	ShaderProgram(const std::string &vertexSource, const std::string &fragmentSource);
 	// Detach shaders, destroy shaders.
 	~ShaderProgram();
-
-	//TODO
+	// Create, compile and link program.
+	void createCompileLink();
 	// Sets the current OpenGL shader program to this.
 	void use();
-	//TODO
 	// Clear OpenGL program binding.
-	// 
 	void removeFromUse();
 private:
 	void displayShaderCompileLog(const std::string &message, const Shader &shader);
