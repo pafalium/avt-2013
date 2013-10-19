@@ -50,7 +50,8 @@ void ShaderProgram::createCompileLink()
 		displayShaderCompileLog("Fragment Shader compilation failed", m_fragmentShader);
 	}
 	// fail if some compilation failed
-	OutStreams::ShaderLog << "ERROR: Shader compilation failed" << std::endl;
+	if (shaderCompilationFailed)
+		OutStreams::ShaderLog << "ERROR: Shader compilation failed" << std::endl;
 
 	// "bind" vertex attribute channels
 	for (VertexAttribChannel vac : VertexAttribChannels){
@@ -105,6 +106,13 @@ void ShaderProgram::displayShaderCompileLog(const std::string &message, const Sh
 	OutStreams::ShaderLog << message << std::endl;
 	OutStreams::ShaderLog << "Printing info log:" << std::endl;
 	OutStreams::ShaderLog << shader.compileLogInfo() << std::endl;
+}
+
+
+// Returns this program's OpenGL name.
+GLuint ShaderProgram::programName()
+{
+	return m_programName;
 }
 
 

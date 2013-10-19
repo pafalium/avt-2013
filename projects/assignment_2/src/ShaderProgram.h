@@ -19,7 +19,11 @@ public:
 	// Detach shaders, destroy shaders.
 	~ShaderProgram();
 	// Create, compile and link program.
+	// After calling this mehtod the program is/should be ready for execution.
+	// TODO uniform ids are not being gathered.
 	void createCompileLink();
+	// Returns this program's OpenGL name.
+	GLuint programName();
 	// Sets the current OpenGL shader program to this.
 	void use();
 	// Clear OpenGL program binding.

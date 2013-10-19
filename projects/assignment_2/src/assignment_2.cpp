@@ -38,6 +38,9 @@
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 
+#include "ShaderProgram.h"
+#include "matrices.h"
+
 #define CAPTION "Hello New World"
 
 int WinX = 640, WinY = 480;
@@ -48,8 +51,10 @@ unsigned int FrameCount = 0;
 #define COLORS 1
 
 GLuint VaoId, VboId[2];
-GLuint VertexShaderId, FragmentShaderId, ProgramId;
+//GLuint VertexShaderId, FragmentShaderId, ProgramId;
 GLint UniformId;
+
+ShaderProgram *PassThroughProgram = 0;
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -107,7 +112,7 @@ const GLchar* FragmentShader =
 
 void createShaderProgram()
 {
-	VertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+	/*VertexShaderId = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(VertexShaderId, 1, &VertexShader, 0);
 	glCompileShader(VertexShaderId);
 
@@ -117,19 +122,20 @@ void createShaderProgram()
 
 	ProgramId = glCreateProgram();
 	glAttachShader(ProgramId, VertexShaderId);
-	glAttachShader(ProgramId, FragmentShaderId);
+	glAttachShader(ProgramId, FragmentShaderId);*/
 
-	glBindAttribLocation(ProgramId, VERTICES, "in_Position");
-	glBindAttribLocation(ProgramId, COLORS, "in_Color");
-	glLinkProgram(ProgramId);
-	UniformId = glGetUniformLocation(ProgramId, "Matrix");
+	PassThroughProgram = new ShaderProgram(VertexShader, FragmentShader);
+	PassThroughProgram->createCompileLink();
+
+	GLuint programID = PassThroughProgram->programName();
+	UniformId = glGetUniformLocation(programID, "Matrix");
 
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 
 void destroyShaderProgram()
 {
-	glUseProgram(0);
+	/*glUseProgram(0);
 	glDetachShader(ProgramId, VertexShaderId);
 	glDetachShader(ProgramId, FragmentShaderId);
 
@@ -137,7 +143,9 @@ void destroyShaderProgram()
 	glDeleteShader(VertexShaderId);
 	glDeleteProgram(ProgramId);
 
-	checkOpenGLError("ERROR: Could not destroy shaders.");
+	checkOpenGLError("ERROR: Could not destroy shaders.");*/
+
+	delete PassThroughProgram;
 }
 
 /////////////////////////////////////////////////////////////////////// VAOs & VBOs
@@ -202,32 +210,39 @@ void destroyBufferObjects()
 
 typedef GLfloat Matrix[16];
 
-const Matrix I = {
+const Matrix Io = {
 	1.0f,  0.0f,  0.0f,  0.0f,
 	0.0f,  1.0f,  0.0f,  0.0f,
 	0.0f,  0.0f,  1.0f,  0.0f,
 	0.0f,  0.0f,  0.0f,  1.0f
 }; // Row Major (GLSL is Column Major)
 
-const Matrix M = {
+const Matrix Mo = {
 	1.0f,  0.0f,  0.0f, -1.0f,
 	0.0f,  1.0f,  0.0f, -1.0f,
 	0.0f,  0.0f,  1.0f,  0.0f,
 	0.0f,  0.0f,  0.0f,  1.0f
 }; // Row Major (GLSL is Column Major)
 
+const Matrix4 I = Matrices::identity();
+const Matrix4 M = Matrices::translate(-1.0f, -1.0f, 0.0f);
+
 void drawScene()
 {
 	glBindVertexArray(VaoId);
-	glUseProgram(ProgramId);
+	//glUseProgram(ProgramId);
+	PassThroughProgram->use();
 
-	glUniformMatrix4fv(UniformId, 1, GL_TRUE, I);
+	//glUniformMatrix4fv(UniformId, 1, GL_TRUE, Io);
+	glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
-	glUniformMatrix4fv(UniformId, 1, GL_TRUE, M);
+	//glUniformMatrix4fv(UniformId, 1, GL_TRUE, Mo);
+	glUniformMatrix4fv(UniformId, 1, GL_FALSE, M.colMajorArray());
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
-	glUseProgram(0);
+	//glUseProgram(0);
+	PassThroughProgram->removeFromUse();
 	glBindVertexArray(0);
 
 	checkOpenGLError("ERROR: Could not draw scene.");

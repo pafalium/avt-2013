@@ -5,7 +5,7 @@
 #include <iostream>
 
 namespace OutStreams {
-	std::ostream &ShaderLog = std::clog;
+	extern std::ostream &ShaderLog;
 }
 
 #endif

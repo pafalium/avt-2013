@@ -47,7 +47,8 @@ void Matrix4::transpose(){
 }
 GLfloat Matrix4::rowColMultiply(int row, const Matrix4 &other, int col) const
 {
-	int currentElem, sum;
+	int currentElem;
+	GLfloat sum;
 	for (currentElem = 0, sum = 0; currentElem < 4; ++currentElem){
 		sum += this->cell(row, currentElem) * other.cell(currentElem, col);
 	}
@@ -56,16 +57,20 @@ GLfloat Matrix4::rowColMultiply(int row, const Matrix4 &other, int col) const
 /////////////////////////////////////////////// ACCESSORS
 GLfloat &Matrix4::cellRef(int row, int col)
 {
-	return m_data[row * 4 + col];
+	return m_data[row + col * 4];
 }
 const GLfloat &Matrix4::cell(int row, int col) const
 {
-	return m_data[row * 4 + col];
+	return m_data[row + col * 4];
 }
 void Matrix4::setColumn(int col, const std::vector<GLfloat> &content)
 {
 	for (int row = 0; row < 4; ++row)
 		cellRef(row, col) = content[row];
+}
+const GLfloat *Matrix4::colMajorArray() const
+{
+	return m_data.data();
 }
 /////////////////////////////////////////////// FRIENDS
 std::ostream &operator<<(std::ostream &o, const Matrix4 &mat)

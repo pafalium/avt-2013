@@ -19,6 +19,8 @@ public:
 	const GLfloat &cell(int row, int col) const;
 	//set a column to a given vector of 4 GLfloats
 	void setColumn(int col, const std::vector<GLfloat> &content);
+	// Get column major array
+	const GLfloat *colMajorArray() const;
 
 	Matrix4 &operator*=(const Matrix4 &other);
 	const Matrix4 operator*(const Matrix4 &other) const;

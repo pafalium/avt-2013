@@ -2,7 +2,7 @@
 
 
 Shader::Shader(GLenum shaderType, const std::string &shaderSource)
-: m_shaderType(shaderType), m_shaderSource(shaderSource), m_shaderName(0)
+: m_shaderName(0), m_shaderType(shaderType), m_shaderSource(shaderSource)
 {
 }
 
@@ -17,7 +17,7 @@ Shader::~Shader()
 // Create the new OpenGL shader object and specify it's source.
 void Shader::createShader()
 {
-	if (m_shaderName == 0)
+	if (m_shaderName != 0)
 		return;
 	// Create OpenGL shader object
 	m_shaderName = glCreateShader(m_shaderType);
@@ -56,4 +56,11 @@ std::string Shader::compileLogInfo() const
 	std::string logInfoString(logInfoArray);
 	delete[] logInfoArray;
 	return logInfoString;
+}
+
+
+// Returns OpenGL shader name of this.
+GLuint Shader::shaderName()
+{
+	return m_shaderName;
 }

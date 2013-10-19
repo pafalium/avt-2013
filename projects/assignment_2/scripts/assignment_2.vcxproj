@@ -75,6 +75,7 @@
     <ClCompile Include="..\src\assignment_2.cpp" />
     <ClCompile Include="..\src\matrices.cpp" />
     <ClCompile Include="..\src\matrices_tests.cpp" />
+    <ClCompile Include="..\src\outputStreams.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\ShaderProgram.cpp" />
   </ItemGroup>
