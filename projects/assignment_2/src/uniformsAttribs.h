@@ -11,17 +11,23 @@
 struct VertexAttribChannel {
 	std::string attribName;
 	GLuint attribIndex;
-	VertexAttribChannel(std::string name, GLuint index) 
-		:attribName(name), attribIndex(index){}
-	bool operator<(const VertexAttribChannel& other) const{
-		return attribName < other.attribName;
-	}
+	VertexAttribChannel(std::string name, GLuint index);
+	bool operator<(const VertexAttribChannel& other) const;
 };
 
-std::set<VertexAttribChannel> VertexAttribChannels =
-{ VertexAttribChannel("in_Position", 0), VertexAttribChannel("in_Color", 1) };
+namespace VertexAttribs {
+	namespace Names {
+		extern const std::string POSITION;
+		extern const std::string COLOR;
+	}
+	namespace Indexes {
+		extern const GLuint POSITION;
+		extern const GLuint COLOR;
+	}
+}
 
-std::set<std::string> UniformNames =
-{};
+extern std::set<VertexAttribChannel> VertexAttribChannels;
+
+extern std::set<std::string> UniformNames;
 
 #endif

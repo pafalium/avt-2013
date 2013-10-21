@@ -39,7 +39,9 @@
 #include "GL/freeglut.h"
 
 #include "ShaderProgram.h"
+#include "RenderModel.h"
 #include "matrices.h"
+#include "model_setup.h"
 
 #define CAPTION "Hello New World"
 
@@ -150,10 +152,10 @@ void destroyShaderProgram()
 
 /////////////////////////////////////////////////////////////////////// VAOs & VBOs
 
-typedef struct {
-	GLfloat XYZW[4];
-	GLfloat RGBA[4];
-} Vertex;
+//typedef struct {
+//	GLfloat XYZW[4];
+//	GLfloat RGBA[4];
+//} Vertex;
 
 const Vertex Vertices[] = 
 {
@@ -179,7 +181,7 @@ void createBufferObjects()
 	glEnableVertexAttribArray(VERTICES);
 	glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
 	glEnableVertexAttribArray(COLORS);
-	glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)sizeof(Vertices[0].XYZW));
+	glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)sizeof(Vertices[0].xyzw));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
@@ -241,6 +243,13 @@ void drawScene()
 	glUniformMatrix4fv(UniformId, 1, GL_FALSE, M.colMajorArray());
 	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
+	glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
+	Models::BigTriModel.drawModel();
+	Models::MedTriModel.drawModel();
+	Models::SmallTriModel.drawModel();
+	Models::SquareModel.drawModel();
+	Models::QuadModel.drawModel();
+
 	//glUseProgram(0);
 	PassThroughProgram->removeFromUse();
 	glBindVertexArray(0);
@@ -254,6 +263,7 @@ void cleanup()
 {
 	destroyShaderProgram();
 	destroyBufferObjects();
+	Models::cleanupModels();
 }
 
 void display()
@@ -347,6 +357,7 @@ void init(int argc, char* argv[])
 	setupOpenGL();
 	createShaderProgram();
 	createBufferObjects();
+	Models::setupModels();
 	setupCallbacks();
 }
 
