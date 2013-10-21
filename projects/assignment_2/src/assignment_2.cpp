@@ -38,6 +38,8 @@
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 
+#include "readFile.h"
+
 #include "ShaderProgram.h"
 #include "RenderModel.h"
 #include "matrices.h"
@@ -82,35 +84,35 @@ void checkOpenGLError(std::string error)
 
 /////////////////////////////////////////////////////////////////////// SHADERs
 
-const GLchar* VertexShader =
-{
-	"#version 330 core\n"
-
-	"in vec4 in_Position;\n"	// "layout(location=0) in vec4 in_Position;"
-	"in vec4 in_Color;\n"		// "layout(location=1) in vec4 in_Color;"
-	"out vec4 ex_Color;\n"
-
-	"uniform mat4 Matrix;\n"
-
-	"void main(void)\n"
-	"{\n"
-	"	gl_Position = Matrix * in_Position;\n"
-	"	ex_Color = in_Color;\n"
-	"}\n"
-};
-
-const GLchar* FragmentShader =
-{
-	"#version 330 core\n"
-
-	"in vec4 ex_Color;\n"
-	"out vec4 out_Color;\n"
-
-	"void main(void)\n"
-	"{\n"
-	"	out_Color = ex_Color;\n"
-	"}\n"
-};
+//const GLchar* VertexShader =
+//{
+//	"#version 330 core\n"
+//
+//	"in vec4 in_Position;\n"	// "layout(location=0) in vec4 in_Position;"
+//	"in vec4 in_Color;\n"		// "layout(location=1) in vec4 in_Color;"
+//	"out vec4 ex_Color;\n"
+//
+//	"uniform mat4 Matrix;\n"
+//
+//	"void main(void)\n"
+//	"{\n"
+//	"	gl_Position = Matrix * in_Position;\n"
+//	"	ex_Color = in_Color;\n"
+//	"}\n"
+//};
+//
+//const GLchar* FragmentShader =
+//{
+//	"#version 330 core\n"
+//
+//	"in vec4 ex_Color;\n"
+//	"out vec4 out_Color;\n"
+//
+//	"void main(void)\n"
+//	"{\n"
+//	"	out_Color = ex_Color;\n"
+//	"}\n"
+//};
 
 void createShaderProgram()
 {
@@ -126,7 +128,12 @@ void createShaderProgram()
 	glAttachShader(ProgramId, VertexShaderId);
 	glAttachShader(ProgramId, FragmentShaderId);*/
 
-	PassThroughProgram = new ShaderProgram(VertexShader, FragmentShader);
+	std::string shaderPath("../src/");
+	std::string vertexFile("vertex.vsh"), fragmentFile("fragment.fsh");
+	std::string vertexShader = readFromFile(shaderPath + vertexFile);
+	std::string fragmentShader = readFromFile(shaderPath + fragmentFile);
+
+	PassThroughProgram = new ShaderProgram(vertexShader, fragmentShader);
 	PassThroughProgram->createCompileLink();
 
 	GLuint programID = PassThroughProgram->programName();

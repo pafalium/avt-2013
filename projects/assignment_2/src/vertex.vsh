@@ -1,13 +1,15 @@
 #version 330 core
 //vertex
 
-layout(location = 0) in vec4 in_pos;
-layout(location = 1) in vec4 in_col;
+in vec4 in_Position;
+in vec4 in_Color;
 
-out vec4 ex_col;
+uniform mat4 Matrix;
+
+out vec4 ex_Color;
 
 void main()
 {
-	gl_Position = in_pos;
-	ex_col = in_col;
+	gl_Position = Matrix * in_Position;
+	ex_Color = in_Color;
 } 
