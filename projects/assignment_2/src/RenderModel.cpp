@@ -43,22 +43,16 @@ void RenderModel::setupModel()
 	glDisableVertexAttribArray(VertexAttribs::Indexes::POSITION);
 	glDisableVertexAttribArray(VertexAttribs::Indexes::COLOR);
 }
-void RenderModel::drawModel()
+void RenderModel::drawModel() const
 {
 	//prepare
 	glBindVertexArray(m_vaoName);
-	//glEnableVertexAttribArray(VertexAttribIndexes::POSITION);
-	//glEnableVertexAttribArray(VertexAttribIndexes::COLOR);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboName);
 
 	//draw
 	glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
 
 	//unbind
 	glBindVertexArray(0);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	//glDisableVertexAttribArray(VertexAttribIndexes::POSITION);
-	//glDisableVertexAttribArray(VertexAttribIndexes::COLOR);
 }
 void RenderModel::cleanupModel()
 {

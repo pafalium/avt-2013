@@ -75,6 +75,7 @@
     <ClCompile Include="..\src\assignment_2.cpp" />
     <ClCompile Include="..\src\matrices.cpp" />
     <ClCompile Include="..\src\matrices_tests.cpp" />
+    <ClCompile Include="..\src\sceneConfigurations.cpp" />
     <ClCompile Include="..\src\model_setup.cpp" />
     <ClCompile Include="..\src\outputStreams.cpp" />
     <ClCompile Include="..\src\readFile.cpp" />
@@ -82,6 +83,8 @@
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\ShaderProgram.cpp" />
     <ClCompile Include="..\src\uniformsAttribs.cpp" />
+    <ClCompile Include="..\src\utils.cpp" />
+    <ClCompile Include="..\src\vector3f.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\fragment.fsh" />
@@ -90,6 +93,7 @@
   <ItemGroup>
     <ClInclude Include="..\src\matrices.h" />
     <ClInclude Include="..\src\matrices_tests.h" />
+    <ClInclude Include="..\src\sceneConfigurations.h" />
     <ClInclude Include="..\src\model_setup.h" />
     <ClInclude Include="..\src\outputStreams.h" />
     <ClInclude Include="..\src\readFile.h" />
@@ -97,6 +101,8 @@
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\ShaderProgram.h" />
     <ClInclude Include="..\src\uniformsAttribs.h" />
+    <ClInclude Include="..\src\utils.h" />
+    <ClInclude Include="..\src\vector3f.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

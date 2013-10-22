@@ -26,6 +26,10 @@ namespace VertexAttribs {
 	}
 }
 
+namespace Uniforms {
+	extern const std::string MATRIX;
+}
+
 extern std::set<VertexAttribChannel> VertexAttribChannels;
 
 extern std::set<std::string> UniformNames;

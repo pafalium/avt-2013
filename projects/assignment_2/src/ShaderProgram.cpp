@@ -9,7 +9,8 @@
 ShaderProgram::ShaderProgram(const std::string &vertexSource, const std::string &fragmentSource)
 : m_vertexShader(GL_VERTEX_SHADER, vertexSource), 
 m_fragmentShader(GL_FRAGMENT_SHADER, fragmentSource),
-m_programName(0)
+m_programName(0),
+m_uniformIds()
 {
 }
 
@@ -64,7 +65,9 @@ void ShaderProgram::createCompileLink()
 	}
 
 	// get uniform ids
-	//TODO
+	for (std::string uniformName : UniformNames) {
+		m_uniformIds[uniformName] = glGetUniformLocation(m_programName, uniformName.c_str());
+	}
 }
 
 GLint ShaderProgram::linkProgram()
@@ -106,6 +109,12 @@ void ShaderProgram::displayShaderCompileLog(const std::string &message, const Sh
 	OutStreams::ShaderLog << message << std::endl;
 	OutStreams::ShaderLog << "Printing info log:" << std::endl;
 	OutStreams::ShaderLog << shader.compileLogInfo() << std::endl;
+}
+
+
+GLint ShaderProgram::getUniformId(const std::string &uniformName)
+{
+	return m_uniformIds[uniformName];
 }
 
 

@@ -19,7 +19,7 @@ public:
 	RenderModel(const std::vector<Vertex> &verts, const std::vector<GLuint> &inds);
 	void setupModel();
 	void cleanupModel();
-	void drawModel();
+	void drawModel() const;
 	size_t vertexNum();
 	void vaoName(GLuint vao);
 	GLuint vaoName();

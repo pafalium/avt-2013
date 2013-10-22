@@ -3,15 +3,15 @@
 // Assignment 2 consists in the following:
 //
 // - Rewrite the program using C++ classes for:
-//   - Matrix manipulation;
+//   [DONE] - Matrix manipulation;
 //   - Shader manipulation;
 //   - Managing drawable entities.
 //
 // - Provide an UML diagram of your solution.
 //
 // - Add the following functionality:
-//   - Read shader code from external files;
-//   - Check shader compilation and linkage for error messages.
+//   [DONE] - Read shader code from external files;
+//   [DONE] - Check shader compilation and linkage for error messages.
 // 
 // - Draw the following scene, minimizing the number of vertices on the GPU:
 //   - A set of 7 TANs (i.e. TANGRAM shapes) of different colors;
@@ -44,6 +44,7 @@
 #include "RenderModel.h"
 #include "matrices.h"
 #include "model_setup.h"
+#include "uniformsAttribs.h"
 
 #define CAPTION "Hello New World"
 
@@ -55,7 +56,6 @@ unsigned int FrameCount = 0;
 #define COLORS 1
 
 GLuint VaoId, VboId[2];
-//GLuint VertexShaderId, FragmentShaderId, ProgramId;
 GLint UniformId;
 
 ShaderProgram *PassThroughProgram = 0;
@@ -84,49 +84,9 @@ void checkOpenGLError(std::string error)
 
 /////////////////////////////////////////////////////////////////////// SHADERs
 
-//const GLchar* VertexShader =
-//{
-//	"#version 330 core\n"
-//
-//	"in vec4 in_Position;\n"	// "layout(location=0) in vec4 in_Position;"
-//	"in vec4 in_Color;\n"		// "layout(location=1) in vec4 in_Color;"
-//	"out vec4 ex_Color;\n"
-//
-//	"uniform mat4 Matrix;\n"
-//
-//	"void main(void)\n"
-//	"{\n"
-//	"	gl_Position = Matrix * in_Position;\n"
-//	"	ex_Color = in_Color;\n"
-//	"}\n"
-//};
-//
-//const GLchar* FragmentShader =
-//{
-//	"#version 330 core\n"
-//
-//	"in vec4 ex_Color;\n"
-//	"out vec4 out_Color;\n"
-//
-//	"void main(void)\n"
-//	"{\n"
-//	"	out_Color = ex_Color;\n"
-//	"}\n"
-//};
-
 void createShaderProgram()
 {
-	/*VertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(VertexShaderId, 1, &VertexShader, 0);
-	glCompileShader(VertexShaderId);
 
-	FragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(FragmentShaderId, 1, &FragmentShader, 0);
-	glCompileShader(FragmentShaderId);
-
-	ProgramId = glCreateProgram();
-	glAttachShader(ProgramId, VertexShaderId);
-	glAttachShader(ProgramId, FragmentShaderId);*/
 
 	std::string shaderPath("../src/");
 	std::string vertexFile("vertex.vsh"), fragmentFile("fragment.fsh");
@@ -144,17 +104,8 @@ void createShaderProgram()
 
 void destroyShaderProgram()
 {
-	/*glUseProgram(0);
-	glDetachShader(ProgramId, VertexShaderId);
-	glDetachShader(ProgramId, FragmentShaderId);
-
-	glDeleteShader(FragmentShaderId);
-	glDeleteShader(VertexShaderId);
-	glDeleteProgram(ProgramId);
-
-	checkOpenGLError("ERROR: Could not destroy shaders.");*/
-
 	delete PassThroughProgram;
+	checkOpenGLError("ERROR: Could not destroy shaders.");
 }
 
 /////////////////////////////////////////////////////////////////////// VAOs & VBOs
@@ -235,29 +186,44 @@ const Matrix Mo = {
 
 const Matrix4 I = Matrices::identity();
 const Matrix4 M = Matrices::translate(-1.0f, -1.0f, 0.0f);
+const Matrix4 TangramScale = Matrices::scale(.4, .4, .4);
+
+SceneConfiguration *activeSceneConfig;
 
 void drawScene()
 {
 	glBindVertexArray(VaoId);
-	//glUseProgram(ProgramId);
 	PassThroughProgram->use();
 
-	//glUniformMatrix4fv(UniformId, 1, GL_TRUE, Io);
-	glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
+	//Models::BackPlaneModel.drawModel();
 
-	//glUniformMatrix4fv(UniformId, 1, GL_TRUE, Mo);
-	glUniformMatrix4fv(UniformId, 1, GL_FALSE, M.colMajorArray());
-	glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
+	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
+	//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
-	glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
-	Models::BigTriModel.drawModel();
-	Models::MedTriModel.drawModel();
-	Models::SmallTriModel.drawModel();
-	Models::SquareModel.drawModel();
-	Models::QuadModel.drawModel();
+	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, M.colMajorArray());
+	//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
 
-	//glUseProgram(0);
+	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
+	////Models::BigTriModel.drawModel();
+	//Models::MedTriModel.drawModel();
+	////Models::SmallTriModel.drawModel();
+	//Models::SquareModel.drawModel();
+	//Models::QuadModel.drawModel();
+
+	//for each model in curr_config
+	//get model matrix
+	//send model matrix to shaders
+	//draw model
+	GLint matrixID = PassThroughProgram->getUniformId(Uniforms::MATRIX);
+	for (std::string objName : Scenes::ObjectNames::ALL_NAMES) {
+		SceneConfiguration::WorldObject wrlObj = activeSceneConfig->getWorldObject(objName);
+		Matrix4 modelMatrix = wrlObj.getModelMatrix();
+		modelMatrix = TangramScale * modelMatrix;
+		glUniformMatrix4fv(matrixID, 1, GL_FALSE, modelMatrix.colMajorArray());
+		wrlObj.drawRenderModel();
+	}
+
 	PassThroughProgram->removeFromUse();
 	glBindVertexArray(0);
 
@@ -305,6 +271,14 @@ void timer(int value)
 }
 
 /////////////////////////////////////////////////////////////////////// SETUP
+
+void setupScenes()
+{
+	createBufferObjects();
+	Models::setupModels();
+	Scenes::setupTangramConfigs();
+	activeSceneConfig = &Scenes::SquareTangramConfig;
+}
 
 void setupCallbacks() 
 {
@@ -363,8 +337,7 @@ void init(int argc, char* argv[])
 	setupGLEW();
 	setupOpenGL();
 	createShaderProgram();
-	createBufferObjects();
-	Models::setupModels();
+	setupScenes();
 	setupCallbacks();
 }
 

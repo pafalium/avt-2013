@@ -20,7 +20,9 @@ namespace VertexAttribs {
 	}
 }
 
-
+namespace Uniforms {
+	const std::string MATRIX = "Matrix";
+}
 
 std::set<VertexAttribChannel> VertexAttribChannels =
 {
@@ -28,4 +30,4 @@ std::set<VertexAttribChannel> VertexAttribChannels =
 	VertexAttribChannel(VertexAttribs::Names::POSITION, VertexAttribs::Indexes::COLOR)
 };
 
-std::set<std::string> UniformNames = {};
+std::set<std::string> UniformNames = {Uniforms::MATRIX};
