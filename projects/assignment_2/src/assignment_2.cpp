@@ -38,13 +38,14 @@
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 
-#include "readFile.h"
 
 #include "ShaderProgram.h"
 #include "RenderModel.h"
+#include "shader_setup.h"
 #include "matrices.h"
 #include "model_setup.h"
 #include "uniformsAttribs.h"
+#include "toggling.h"
 
 #define CAPTION "Hello New World"
 
@@ -52,8 +53,8 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-ShaderProgram *PassThroughProgram = 0;
-ShaderProgram *MonoChromeProgram = 0;
+//ShaderProgram *PassThroughProgram = 0;
+//ShaderProgram *MonoChromeProgram = 0;
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -81,27 +82,13 @@ void checkOpenGLError(std::string error)
 
 void createShaderProgram()
 {
-	std::string shaderPath("../src/");
-	std::string vertexFile("vertex.vsh"), fragmentFile("fragment.fsh");
-	std::string vertexShader = readFromFile(shaderPath + vertexFile);
-	std::string fragmentShader = readFromFile(shaderPath + fragmentFile);
-
-	PassThroughProgram = new ShaderProgram(vertexShader, fragmentShader);
-	PassThroughProgram->createCompileLink();
-
-	std::string monoChromeFragFile("monoChrom.fsh");
-	std::string monoChromeFragShader = readFromFile(shaderPath + monoChromeFragFile);
-
-	MonoChromeProgram = new ShaderProgram(vertexShader, monoChromeFragShader);
-	MonoChromeProgram->createCompileLink();
-
+	ShaderPrograms::setupPrograms();
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
 
 void destroyShaderProgram()
 {
-	delete PassThroughProgram;
-	delete MonoChromeProgram;
+	ShaderPrograms::cleanupPrograms();
 	checkOpenGLError("ERROR: Could not destroy shaders.");
 }
 
@@ -113,28 +100,34 @@ const Matrix4 TangramScale = Matrices::scale(.4, .4, 1);
 SceneConfiguration *activeSceneConfig;
 ShaderProgram *tangramShaderProgram;
 
+Toggler *toggler;
+
 void drawScene()
 {
-	PassThroughProgram->use();
-	GLint matrixID = PassThroughProgram->getUniformId(Uniforms::MATRIX);
+	ShaderPrograms::PassThroughProgram->use();
+	GLint matrixID = ShaderPrograms::PassThroughProgram->getUniformId(Uniforms::MATRIX);
 	//draw background plane
 	glUniformMatrix4fv(matrixID, 1, GL_FALSE, I.colMajorArray());
 	Models::BackPlaneModel.drawModel();
-	PassThroughProgram->removeFromUse();
+	ShaderPrograms::PassThroughProgram->removeFromUse();
 	
-	tangramShaderProgram->use();
+	//tangramShaderProgram->use();
+	ShaderProgram *currProg = toggler->currentTangramShaderProgram();
+	currProg->use();
 	//for each model in curr_config
 	//get model matrix
 	//send model matrix to shaders
 	//draw model
+	SceneConfiguration *currSceneConfig = toggler->currentSceneConfiguration();
 	for (std::string objName : Scenes::ObjectNames::ALL_NAMES) {
-		SceneConfiguration::WorldObject wrlObj = activeSceneConfig->getWorldObject(objName);
+		SceneConfiguration::WorldObject wrlObj = currSceneConfig->getWorldObject(objName);
 		Matrix4 modelMatrix = wrlObj.getModelMatrix();
 		modelMatrix = TangramScale * modelMatrix;
 		glUniformMatrix4fv(matrixID, 1, GL_FALSE, modelMatrix.colMajorArray());
 		wrlObj.drawRenderModel();
 	}
-	tangramShaderProgram->removeFromUse();
+	currProg->removeFromUse();
+	//tangramShaderProgram->removeFromUse();
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
@@ -145,6 +138,8 @@ void cleanup()
 {
 	destroyShaderProgram();
 	Models::cleanupModels();
+	//cleanup toggling
+	delete toggler;
 }
 
 void display()
@@ -178,6 +173,15 @@ void timer(int value)
     glutTimerFunc(1000, timer, 0);
 }
 
+void keyPressed(unsigned char key, int x, int y)
+{
+	switch (key){
+	case 't':
+		toggler->toggle();
+		break;
+	}
+}
+
 /////////////////////////////////////////////////////////////////////// SETUP
 
 void setupScenes()
@@ -189,7 +193,9 @@ void setupScenes()
 
 void setupToggling()
 {
-	tangramShaderProgram = MonoChromeProgram;
+	toggler = new Toggler(TogglerSquare::instance());
+	//tangramShaderProgram = MonoChromeProgram;
+	tangramShaderProgram = ShaderPrograms::PassThroughProgram;
 }
 
 void setupCallbacks() 
@@ -198,6 +204,7 @@ void setupCallbacks()
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
+	glutKeyboardFunc(keyPressed);
 	glutTimerFunc(0,timer,0);
 }
 

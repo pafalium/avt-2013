@@ -83,6 +83,8 @@
     <ClCompile Include="..\src\RenderModel.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\ShaderProgram.cpp" />
+    <ClCompile Include="..\src\shader_setup.cpp" />
+    <ClCompile Include="..\src\toggling.cpp" />
     <ClCompile Include="..\src\uniformsAttribs.cpp" />
     <ClCompile Include="..\src\utils.cpp" />
     <ClCompile Include="..\src\vector3f.cpp" />
@@ -102,6 +104,8 @@
     <ClInclude Include="..\src\RenderModel.h" />
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\ShaderProgram.h" />
+    <ClInclude Include="..\src\shader_setup.h" />
+    <ClInclude Include="..\src\toggling.h" />
     <ClInclude Include="..\src\uniformsAttribs.h" />
     <ClInclude Include="..\src\utils.h" />
     <ClInclude Include="..\src\vector3f.h" />
