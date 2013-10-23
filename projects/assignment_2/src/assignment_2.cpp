@@ -4,8 +4,8 @@
 //
 // - Rewrite the program using C++ classes for:
 //   [DONE] - Matrix manipulation;
-//   - Shader manipulation;
-//   - Managing drawable entities.
+//   [DONE] - Shader manipulation;
+//   [DONE] - Managing drawable entities.
 //
 // - Provide an UML diagram of your solution.
 //
@@ -14,8 +14,8 @@
 //   [DONE] - Check shader compilation and linkage for error messages.
 // 
 // - Draw the following scene, minimizing the number of vertices on the GPU:
-//   - A set of 7 TANs (i.e. TANGRAM shapes) of different colors;
-//   - A flat surface on which the TANs will be placed (with an appropriate contrasting color).
+//   [DONE] - A set of 7 TANs (i.e. TANGRAM shapes) of different colors;
+//   [DONE] - A flat surface on which the TANs will be placed (with an appropriate contrasting color).
 //
 // - Alternate between the following dispositions when the user presses the 't' key;
 //   - The 7 TANs in their original square configuration;
@@ -52,13 +52,8 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-#define VERTICES 0
-#define COLORS 1
-
-GLuint VaoId, VboId[2];
-GLint UniformId;
-
 ShaderProgram *PassThroughProgram = 0;
+ShaderProgram *MonoChromeProgram = 0;
 
 /////////////////////////////////////////////////////////////////////// ERRORS
 
@@ -86,8 +81,6 @@ void checkOpenGLError(std::string error)
 
 void createShaderProgram()
 {
-
-
 	std::string shaderPath("../src/");
 	std::string vertexFile("vertex.vsh"), fragmentFile("fragment.fsh");
 	std::string vertexShader = readFromFile(shaderPath + vertexFile);
@@ -96,8 +89,11 @@ void createShaderProgram()
 	PassThroughProgram = new ShaderProgram(vertexShader, fragmentShader);
 	PassThroughProgram->createCompileLink();
 
-	GLuint programID = PassThroughProgram->programName();
-	UniformId = glGetUniformLocation(programID, "Matrix");
+	std::string monoChromeFragFile("monoChrom.fsh");
+	std::string monoChromeFragShader = readFromFile(shaderPath + monoChromeFragFile);
+
+	MonoChromeProgram = new ShaderProgram(vertexShader, monoChromeFragShader);
+	MonoChromeProgram->createCompileLink();
 
 	checkOpenGLError("ERROR: Could not create shaders.");
 }
@@ -105,117 +101,32 @@ void createShaderProgram()
 void destroyShaderProgram()
 {
 	delete PassThroughProgram;
+	delete MonoChromeProgram;
 	checkOpenGLError("ERROR: Could not destroy shaders.");
-}
-
-/////////////////////////////////////////////////////////////////////// VAOs & VBOs
-
-//typedef struct {
-//	GLfloat XYZW[4];
-//	GLfloat RGBA[4];
-//} Vertex;
-
-const Vertex Vertices[] = 
-{
-	{{ 0.25f, 0.25f, 0.0f, 1.0f }, { 1.0f, 0.0f, 0.0f, 1.0f }},
-	{{ 0.75f, 0.25f, 0.0f, 1.0f }, { 0.0f, 1.0f, 0.0f, 1.0f }},
-	{{ 0.50f, 0.75f, 0.0f, 1.0f }, { 0.0f, 0.0f, 1.0f, 1.0f }}
-};
-
-const GLubyte Indices[] =
-{
-	0,1,2
-};
-
-void createBufferObjects()
-{
-	glGenVertexArrays(1, &VaoId);
-	glBindVertexArray(VaoId);
-
-	glGenBuffers(2, VboId);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW);
-	glEnableVertexAttribArray(VERTICES);
-	glVertexAttribPointer(VERTICES, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-	glEnableVertexAttribArray(COLORS);
-	glVertexAttribPointer(COLORS, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid *)sizeof(Vertices[0].xyzw));
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glDisableVertexAttribArray(VERTICES);
-	glDisableVertexAttribArray(COLORS);
-
-	checkOpenGLError("ERROR: Could not create VAOs and VBOs.");
-}
-
-void destroyBufferObjects()
-{
-	glDisableVertexAttribArray(VERTICES);
-	glDisableVertexAttribArray(COLORS);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-	glDeleteBuffers(2, VboId);
-	glDeleteVertexArrays(1, &VaoId);
-	checkOpenGLError("ERROR: Could not destroy VAOs and VBOs.");
 }
 
 /////////////////////////////////////////////////////////////////////// SCENE
 
-typedef GLfloat Matrix[16];
-
-const Matrix Io = {
-	1.0f,  0.0f,  0.0f,  0.0f,
-	0.0f,  1.0f,  0.0f,  0.0f,
-	0.0f,  0.0f,  1.0f,  0.0f,
-	0.0f,  0.0f,  0.0f,  1.0f
-}; // Row Major (GLSL is Column Major)
-
-const Matrix Mo = {
-	1.0f,  0.0f,  0.0f, -1.0f,
-	0.0f,  1.0f,  0.0f, -1.0f,
-	0.0f,  0.0f,  1.0f,  0.0f,
-	0.0f,  0.0f,  0.0f,  1.0f
-}; // Row Major (GLSL is Column Major)
-
 const Matrix4 I = Matrices::identity();
-const Matrix4 M = Matrices::translate(-1.0f, -1.0f, 0.0f);
-const Matrix4 TangramScale = Matrices::scale(.4, .4, .4);
+const Matrix4 TangramScale = Matrices::scale(.4, .4, 1);
 
 SceneConfiguration *activeSceneConfig;
+ShaderProgram *tangramShaderProgram;
 
 void drawScene()
 {
-	glBindVertexArray(VaoId);
 	PassThroughProgram->use();
-
-	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
-	//Models::BackPlaneModel.drawModel();
-
-	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
-	//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
-
-	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, M.colMajorArray());
-	//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE, (GLvoid*)0);
-
-	//glUniformMatrix4fv(UniformId, 1, GL_FALSE, I.colMajorArray());
-	////Models::BigTriModel.drawModel();
-	//Models::MedTriModel.drawModel();
-	////Models::SmallTriModel.drawModel();
-	//Models::SquareModel.drawModel();
-	//Models::QuadModel.drawModel();
-
+	GLint matrixID = PassThroughProgram->getUniformId(Uniforms::MATRIX);
+	//draw background plane
+	glUniformMatrix4fv(matrixID, 1, GL_FALSE, I.colMajorArray());
+	Models::BackPlaneModel.drawModel();
+	PassThroughProgram->removeFromUse();
+	
+	tangramShaderProgram->use();
 	//for each model in curr_config
 	//get model matrix
 	//send model matrix to shaders
 	//draw model
-	GLint matrixID = PassThroughProgram->getUniformId(Uniforms::MATRIX);
 	for (std::string objName : Scenes::ObjectNames::ALL_NAMES) {
 		SceneConfiguration::WorldObject wrlObj = activeSceneConfig->getWorldObject(objName);
 		Matrix4 modelMatrix = wrlObj.getModelMatrix();
@@ -223,9 +134,7 @@ void drawScene()
 		glUniformMatrix4fv(matrixID, 1, GL_FALSE, modelMatrix.colMajorArray());
 		wrlObj.drawRenderModel();
 	}
-
-	PassThroughProgram->removeFromUse();
-	glBindVertexArray(0);
+	tangramShaderProgram->removeFromUse();
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
@@ -235,7 +144,6 @@ void drawScene()
 void cleanup()
 {
 	destroyShaderProgram();
-	destroyBufferObjects();
 	Models::cleanupModels();
 }
 
@@ -274,10 +182,14 @@ void timer(int value)
 
 void setupScenes()
 {
-	createBufferObjects();
 	Models::setupModels();
 	Scenes::setupTangramConfigs();
-	activeSceneConfig = &Scenes::SquareTangramConfig;
+	activeSceneConfig = &Scenes::FigureTangramConfig;
+}
+
+void setupToggling()
+{
+	tangramShaderProgram = MonoChromeProgram;
 }
 
 void setupCallbacks() 
@@ -338,6 +250,7 @@ void init(int argc, char* argv[])
 	setupOpenGL();
 	createShaderProgram();
 	setupScenes();
+	setupToggling();
 	setupCallbacks();
 }
 

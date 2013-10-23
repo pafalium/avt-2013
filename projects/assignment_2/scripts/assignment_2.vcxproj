@@ -55,6 +55,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -88,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\fragment.fsh" />
+    <None Include="..\src\monoChrom.fsh" />
     <None Include="..\src\vertex.vsh" />
   </ItemGroup>
   <ItemGroup>

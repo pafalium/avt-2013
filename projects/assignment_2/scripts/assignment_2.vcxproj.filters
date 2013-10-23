@@ -66,6 +66,9 @@
     <None Include="..\src\vertex.vsh">
       <Filter>Shader Files</Filter>
     </None>
+    <None Include="..\src\monoChrom.fsh">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\matrices.h">

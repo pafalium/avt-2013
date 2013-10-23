@@ -38,10 +38,10 @@ std::vector<Vertex> bigTri1Verts = {
 	{ { 0, -.5, 0, 1 }, { 0, 0, .8, 1 } },
 	{ { -.5, 0, 0, 1 }, { 0, 0, .8, 1 } },
 }, backPlaneVerts = {
-	{ { .9, .9, 0, 1 }, { .2, .2, .2, 1 } },
-	{ { -.9, .9, 0, 1 }, { .2, .2, .2, 1 } },
-	{ { -.9, -.9, 0, 1 }, { .2, .2, .2, 1 } },
-	{ { .9, -.9, 0, 1 }, { .2, .2, .2, 1 } }
+	{ { .9, .9, 1, 1 }, { .2, .2, .2, 1 } },
+	{ { -.9, .9, 1, 1 }, { .2, .2, .2, 1 } },
+	{ { -.9, -.9, 1, 1 }, { .2, .2, .2, 1 } },
+	{ { .9, -.9, 1, 1 }, { .2, .2, .2, 1 } }
 };
 
 std::vector<GLuint> bigTriInds = { 2, 1, 0 },
@@ -72,27 +72,12 @@ namespace Models {
 	{
 		for (RenderModel *model : allModels)
 			model->setupModel();
-		//BigTri1Model.setupModel();
-		//BigTri2Model.setupModel();
-		//MedTriModel.setupModel();
-		//SmallTri1Model.setupModel();
-		//SmallTri2Model.setupModel();
-		//QuadModel.setupModel();
-		//SquareModel.setupModel();
 	}
 
 	void cleanupModels()
 	{
 		for (RenderModel *model : allModels)
 			model->cleanupModel();
-
-		//BigTri1Model.cleanupModel();
-		//BigTri2Model.cleanupModel();
-		//MedTriModel.cleanupModel();
-		//SmallTri1Model.cleanupModel();
-		//SmallTri2Model.cleanupModel();
-		//QuadModel.cleanupModel();
-		//SquareModel.cleanupModel();
 	}
 
 }
@@ -117,24 +102,24 @@ namespace Scenes {
 
 	void setupSquareTangramConfig()
 	{
-		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_1, &Models::BigTri1Model, Vector3f(0, .66666, .1), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_2, &Models::BigTri2Model, Vector3f(-.66666, 0, .2), deg2Rad(90));
-		SquareTangramConfig.addWorldObject(ObjectNames::MED_TRI_1, &Models::MedTriModel, Vector3f(.66666, -.66666, .15), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_1, &Models::SmallTri1Model, Vector3f(.83333, .5, .17), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_2, &Models::SmallTri2Model, Vector3f(0, -.33333, .16), deg2Rad(-90));
-		SquareTangramConfig.addWorldObject(ObjectNames::SQR, &Models::SquareModel, Vector3f(.5, 0, .165), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::QUAD, &Models::QuadModel, Vector3f(-.25, -.75, .12), deg2Rad(90));
+		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_1, &Models::BigTri1Model, Vector3f(0, .66666, .9), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_2, &Models::BigTri2Model, Vector3f(-.66666, 0, .8), deg2Rad(90));
+		SquareTangramConfig.addWorldObject(ObjectNames::MED_TRI_1, &Models::MedTriModel, Vector3f(.66666, -.66666, .85), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_1, &Models::SmallTri1Model, Vector3f(.83333, .5, .83), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_2, &Models::SmallTri2Model, Vector3f(0, -.33333, .84), deg2Rad(-90));
+		SquareTangramConfig.addWorldObject(ObjectNames::SQR, &Models::SquareModel, Vector3f(.5, 0, .835), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::QUAD, &Models::QuadModel, Vector3f(-.25, -.75, .88), deg2Rad(90));
 	}
 
 	void setupFigureTangramConfig()
 	{
-		FigureTangramConfig.addWorldObject(ObjectNames::BIG_TRI_1, &Models::BigTri1Model, Vector3f(.42872, -.32383, .1), 0);
-		FigureTangramConfig.addWorldObject(ObjectNames::BIG_TRI_2, &Models::BigTri2Model, Vector3f(.67121, .81169, .2), deg2Rad(210));
-		FigureTangramConfig.addWorldObject(ObjectNames::MED_TRI_1, &Models::MedTriModel, Vector3f(-.69603, -.37143, .15), deg2Rad(135));
-		FigureTangramConfig.addWorldObject(ObjectNames::SML_TRI_1, &Models::SmallTri1Model, Vector3f(-.55596, .62340, .17), deg2Rad(90));
-		FigureTangramConfig.addWorldObject(ObjectNames::SML_TRI_2, &Models::SmallTri2Model, Vector3f(-1.57758, -.39284, .16), deg2Rad(90));
-		FigureTangramConfig.addWorldObject(ObjectNames::SQR, &Models::SquareModel, Vector3f(-1.07758, .27403, .165), 0);
-		FigureTangramConfig.addWorldObject(ObjectNames::QUAD, &Models::QuadModel, Vector3f(1.78149, .28546, .12), deg2Rad(-90));
+		FigureTangramConfig.addWorldObject(ObjectNames::BIG_TRI_1, &Models::BigTri1Model, Vector3f(.42872, -.32383, .9), 0);
+		FigureTangramConfig.addWorldObject(ObjectNames::BIG_TRI_2, &Models::BigTri2Model, Vector3f(.67121, .81169, .8), deg2Rad(210));
+		FigureTangramConfig.addWorldObject(ObjectNames::MED_TRI_1, &Models::MedTriModel, Vector3f(-.69603, -.37143, .85), deg2Rad(135));
+		FigureTangramConfig.addWorldObject(ObjectNames::SML_TRI_1, &Models::SmallTri1Model, Vector3f(-.55596, .62340, .83), deg2Rad(90));
+		FigureTangramConfig.addWorldObject(ObjectNames::SML_TRI_2, &Models::SmallTri2Model, Vector3f(-1.57758, -.39284, .84), deg2Rad(90));
+		FigureTangramConfig.addWorldObject(ObjectNames::SQR, &Models::SquareModel, Vector3f(-1.07758, .27403, .835), 0);
+		FigureTangramConfig.addWorldObject(ObjectNames::QUAD, &Models::QuadModel, Vector3f(1.78149, .28546, .88), deg2Rad(-90));
 	}
 
 	void setupTangramConfigs()
