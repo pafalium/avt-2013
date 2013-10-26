@@ -34,8 +34,9 @@ namespace Scenes {
 		extern const std::vector<std::string> ALL_NAMES;
 	}
 
-	extern SceneConfiguration SquareTangramConfig;
-	extern SceneConfiguration FigureTangramConfig;
+	extern StaticSceneConfiguration SquareTangramConfig;
+	extern StaticSceneConfiguration FigureTangramConfig;
+	extern TwoSceneLerpConfig SqrFigTangramConfig;
 
 	void setupTangramConfigs();
 }

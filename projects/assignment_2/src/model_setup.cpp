@@ -97,8 +97,9 @@ namespace Scenes {
 		};
 	}
 
-	SceneConfiguration SquareTangramConfig;
-	SceneConfiguration FigureTangramConfig;
+	StaticSceneConfiguration SquareTangramConfig;
+	StaticSceneConfiguration FigureTangramConfig;
+	TwoSceneLerpConfig SqrFigTangramConfig(&SquareTangramConfig,&FigureTangramConfig,1000);
 
 	void setupSquareTangramConfig()
 	{
@@ -122,9 +123,15 @@ namespace Scenes {
 		FigureTangramConfig.addWorldObject(ObjectNames::QUAD, &Models::QuadModel, Vector3f(1.78149, .28546, .88), deg2Rad(-90));
 	}
 
+	void setupSqrFigTangramConfig()
+	{
+		//Nothing to do here for now...
+	}
+
 	void setupTangramConfigs()
 	{
 		setupSquareTangramConfig();
 		setupFigureTangramConfig();
+		setupSqrFigTangramConfig();
 	}
 }

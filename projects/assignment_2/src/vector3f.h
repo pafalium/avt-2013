@@ -15,10 +15,19 @@ public:
 	Vector3f &operator *= (const GLfloat &scalar);
 	friend const Vector3f operator*(const Vector3f &vec, const GLfloat &scalar);
 	friend const Vector3f operator*(const GLfloat &scalar, const Vector3f &vec);
+	Vector3f &operator -= (const Vector3f &other);
+	friend const Vector3f operator-(const Vector3f &vec1, const Vector3f &vec2);
+	Vector3f &operator += (const Vector3f &other);
+	friend const Vector3f operator+(const Vector3f &vec1, const Vector3f &vec2);
 
-	GLfloat x();
-	GLfloat y();
-	GLfloat z();
+	GLfloat x() const;
+	GLfloat y() const;
+	GLfloat z() const;
 };
+
+const Vector3f operator*(const Vector3f &vec, const GLfloat &scalar);
+const Vector3f operator*(const GLfloat &scalar, const Vector3f &vec);
+const Vector3f operator-(const Vector3f &vec1, const Vector3f &vec2);
+const Vector3f operator+(const Vector3f &vec1, const Vector3f &vec2);
 
 #endif

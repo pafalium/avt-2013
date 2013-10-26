@@ -52,6 +52,8 @@ void TogglerState::setOwnerState(Toggler *owner, TogglerState *state)
 	owner->setState(state);
 }
 
+///////////////////////////////////////////////////////////////////// STATES
+
 //class TogglerSquare : TogglerState {
 //	//TODO initialize to 0
 //	static TogglerSquare *Instance;
@@ -155,4 +157,39 @@ SceneConfiguration *TogglerSilhouette::currentSceneConfiguration()
 ShaderProgram *TogglerSilhouette::currentTangramShaderProgram()
 {
 	return ShaderPrograms::MonoChromeProgram;
+}
+
+
+//class TogglerInterpolate : public TogglerState {
+//	static TogglerInterpolate *Instance;
+//public:
+//	static TogglerInterpolate *instance();
+//	void toggle(Toggler *owner);
+//	SceneConfiguration *currentSceneConfiguration();
+//	ShaderProgram *currentTangramShaderProgram();
+//};
+
+TogglerInterpolate *TogglerInterpolate::Instance = 0;
+
+TogglerInterpolate *TogglerInterpolate::instance()
+{
+	if (Instance == 0)
+		Instance = new TogglerInterpolate();
+
+	return Instance;
+}
+
+void TogglerInterpolate::toggle(Toggler *owner)
+{
+	setOwnerState(owner, TogglerFigure::instance());
+}
+
+SceneConfiguration *TogglerInterpolate::currentSceneConfiguration()
+{
+	return &Scenes::SqrFigTangramConfig;
+}
+
+ShaderProgram *TogglerInterpolate::currentTangramShaderProgram()
+{
+	return ShaderPrograms::PassThroughProgram;
 }

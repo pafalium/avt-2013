@@ -18,9 +18,9 @@
 //   [DONE] - A flat surface on which the TANs will be placed (with an appropriate contrasting color).
 //
 // - Alternate between the following dispositions when the user presses the 't' key;
-//   - The 7 TANs in their original square configuration;
-//   - The 7 TANs put together to form a shape of your choice (6500 to choose from!);
-//   - The silhouette of the shape of your choice on the flat surface.
+//   [DONE] - The 7 TANs in their original square configuration;
+//   [DONE] - The 7 TANs put together to form a shape of your choice (6500 to choose from!);
+//   [DONE] - The silhouette of the shape of your choice on the flat surface.
 //
 // Further suggestions to verify your understanding of the concepts explored:
 //
@@ -96,9 +96,6 @@ void destroyShaderProgram()
 
 const Matrix4 I = Matrices::identity();
 const Matrix4 TangramScale = Matrices::scale(.4, .4, 1);
-
-SceneConfiguration *activeSceneConfig;
-ShaderProgram *tangramShaderProgram;
 
 Toggler *toggler;
 
@@ -188,14 +185,11 @@ void setupScenes()
 {
 	Models::setupModels();
 	Scenes::setupTangramConfigs();
-	activeSceneConfig = &Scenes::FigureTangramConfig;
 }
 
 void setupToggling()
 {
 	toggler = new Toggler(TogglerSquare::instance());
-	//tangramShaderProgram = MonoChromeProgram;
-	tangramShaderProgram = ShaderPrograms::PassThroughProgram;
 }
 
 void setupCallbacks() 

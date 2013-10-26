@@ -33,7 +33,6 @@ public:
 };
 
 class TogglerSquare : public TogglerState {
-	//TODO initialize to 0
 	static TogglerSquare *Instance;
 public:
 	static TogglerSquare *instance();
@@ -43,7 +42,6 @@ public:
 };
 
 class TogglerFigure : public TogglerState {
-	//TODO initialize to 0
 	static TogglerFigure *Instance;
 public:
 	static TogglerFigure *instance();
@@ -53,10 +51,21 @@ public:
 };
 
 class TogglerSilhouette : public TogglerState {
-	//TODO initialize to 0
 	static TogglerSilhouette *Instance;
 public:
 	static TogglerSilhouette *instance();
+	void toggle(Toggler *owner);
+	SceneConfiguration *currentSceneConfiguration();
+	ShaderProgram *currentTangramShaderProgram();
+};
+
+//TODO insert transition from 'square' to 'this' and from 'this' to 'figure'
+//TODO implement lerp reset when entering this state
+//TODO implement timed lerp t-value increments when on this state
+class TogglerInterpolate : public TogglerState {
+	static TogglerInterpolate *Instance;
+public:
+	static TogglerInterpolate *instance();
 	void toggle(Toggler *owner);
 	SceneConfiguration *currentSceneConfiguration();
 	ShaderProgram *currentTangramShaderProgram();
