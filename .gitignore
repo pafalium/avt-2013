@@ -2,6 +2,7 @@
 
 *.sdf
 *.opensdf
+*.v12.suo
 
 projects/*/obj/*
 projects/bin/*
