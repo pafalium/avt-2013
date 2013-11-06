@@ -170,6 +170,12 @@ void timer(int value)
     glutTimerFunc(1000, timer, 0);
 }
 
+void lerpTestTimer(int val)
+{
+	Scenes::SqrFigTangramConfig.incrMSecsLoop(16);
+	glutTimerFunc(16, lerpTestTimer, 0);
+}
+
 void keyPressed(unsigned char key, int x, int y)
 {
 	switch (key){
@@ -200,6 +206,8 @@ void setupCallbacks()
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyPressed);
 	glutTimerFunc(0,timer,0);
+	//lerp test
+	glutTimerFunc(0, lerpTestTimer, 0);
 }
 
 void setupOpenGL() {

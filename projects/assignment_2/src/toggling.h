@@ -59,7 +59,7 @@ public:
 	ShaderProgram *currentTangramShaderProgram();
 };
 
-//TODO insert transition from 'square' to 'this' and from 'this' to 'figure'
+//TODO insert transition from 'square' to 'this'
 //TODO implement lerp reset when entering this state
 //TODO implement timed lerp t-value increments when on this state
 class TogglerInterpolate : public TogglerState {

@@ -73,6 +73,13 @@ void TwoSceneLerpConfig::incrCurrentMScecs(float msecs)
 		m_currentMSecs = m_durationMSecs;
 }
 
+void TwoSceneLerpConfig::incrMSecsLoop(float msecs)
+{
+	float increment = std::abs(msecs);
+	float newCurrMsecs = m_currentMSecs + increment;
+	m_currentMSecs = std::fmod(newCurrMsecs,m_durationMSecs);
+}
+
 void TwoSceneLerpConfig::resetCurrentMSecs()
 {
 	m_currentMSecs = 0;

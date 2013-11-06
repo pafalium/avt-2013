@@ -74,6 +74,8 @@ public:
 	//Increment current time by the absolute value of the argument.
 	//When the current time exceeds total duration-> current time = total duration.
 	void incrCurrentMScecs(float msecs);
+
+	void incrMSecsLoop(float msecs);
 };
 
 #endif

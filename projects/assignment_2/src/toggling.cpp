@@ -76,7 +76,7 @@ TogglerSquare *TogglerSquare::instance()
 
 void TogglerSquare::toggle(Toggler *owner)
 {
-	setOwnerState(owner, TogglerFigure::instance());
+	setOwnerState(owner, TogglerInterpolate::instance());
 }
 
 SceneConfiguration *TogglerSquare::currentSceneConfiguration()
