@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "assignment_1_tangram", "..\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "assignment_2", "..\projects\assignment_2\scripts\assignment_2.vcxproj", "{E157EADA-A320-4E91-AD6B-093BA620BD6A}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "assignment_3", "..\projects\assignment_3\scripts\assignment_3.vcxproj", "{05093FC8-9DDC-4082-B093-81B6F4EA93C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +29,10 @@ Global
 		{E157EADA-A320-4E91-AD6B-093BA620BD6A}.Debug|Win32.Build.0 = Debug|Win32
 		{E157EADA-A320-4E91-AD6B-093BA620BD6A}.Release|Win32.ActiveCfg = Release|Win32
 		{E157EADA-A320-4E91-AD6B-093BA620BD6A}.Release|Win32.Build.0 = Release|Win32
+		{05093FC8-9DDC-4082-B093-81B6F4EA93C7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{05093FC8-9DDC-4082-B093-81B6F4EA93C7}.Debug|Win32.Build.0 = Debug|Win32
+		{05093FC8-9DDC-4082-B093-81B6F4EA93C7}.Release|Win32.ActiveCfg = Release|Win32
+		{05093FC8-9DDC-4082-B093-81B6F4EA93C7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
