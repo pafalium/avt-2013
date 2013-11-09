@@ -6,9 +6,11 @@
 #include <GL/glew.h>
 #include <vector>
 
+
 class Vector3f {
 	std::vector<GLfloat> m_data;
-
+	//threshold
+	static const GLfloat m_Threshold;
 public:
 	Vector3f(GLfloat x, GLfloat y, GLfloat z);
 	
@@ -23,6 +25,17 @@ public:
 	GLfloat x() const;
 	GLfloat y() const;
 	GLfloat z() const;
+
+	//norm
+	GLfloat norm() const;
+	//normalize
+	void normalize();
+	//clean (zero fields close to zero)
+	void clean();
+	//dot product
+	GLfloat dot(const Vector3f &other) const;
+	//cross product
+	Vector3f cross(const Vector3f &other) const;
 };
 
 const Vector3f operator*(const Vector3f &vec, const GLfloat &scalar);

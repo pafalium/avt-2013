@@ -104,6 +104,10 @@ namespace Matrices {
 
 		return mat;
 	}
+	Matrix4 translate(Vector3f delta)
+	{
+		return translate(delta.x(), delta.y(), delta.z());
+	}
 	Matrix4 scale(GLfloat sx, GLfloat sy, GLfloat sz)
 	{
 		std::vector<GLfloat> content =
@@ -124,5 +128,57 @@ namespace Matrices {
 		0, 0, 0, 1};
 
 		return Matrix4(content, true);
+	}
+	Matrix4 lookAt(const Vector3f &eye, const Vector3f &center, const Vector3f &up)
+	{
+		Vector3f view = center - eye;
+		view.normalize();
+		Vector3f side = view.cross(up);
+		side.normalize();
+		Vector3f upNorm = side.cross(view);
+
+		std::vector<GLfloat> rotData =
+		{ side.x(), upNorm.x(), -view.x(), 0,
+		side.y(), upNorm.y(), -view.y(), 0,
+		side.z(), upNorm.z(), -view.z(), 0,
+		0, 0, 0, 1 };
+		Matrix4 rot(rotData);
+
+		Matrix4 trans = translate(Vector3f(0, 0, 0) - eye);
+
+		return rot * trans;
+	}
+	Matrix4 orthoProj(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
+	{
+		GLfloat rml = 1.0 / (r - l);
+		GLfloat tmb = 1.0 / (t - b);
+		GLfloat fmn = 1.0 / (f - n);
+
+		GLfloat tx = (r + l)*rml;
+		GLfloat ty = (t + b)*tmb;
+		GLfloat tz = (f + n)*fmn;
+
+		std::vector<GLfloat> ortData =
+		{
+			2*rml, 0, 0, 0,
+			0, 2*tmb, 0, 0,
+			0, 0, 2*fmn, 0,
+			tx, ty, tz, 1
+		};
+		return Matrix4(ortData);
+	}
+	Matrix4 perspectiveProj(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
+	{
+		GLfloat d = 1.0 / std::tan(fovy / 2.0);
+		GLfloat nmf = 1.0 / (zNear - zFar);
+		
+		std::vector<GLfloat> perspData =
+		{
+			d / aspect, 0, 0, 0,
+			0, d, 0, 0,
+			0, 0, -(zFar + zNear)*nmf, -1.0,
+			0, 0, (2 * zFar*zNear)*nmf, 0
+		};
+		return Matrix4(perspData);
 	}
 }

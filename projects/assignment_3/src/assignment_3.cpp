@@ -14,10 +14,10 @@
 //     be perfectly aligned in the new dimension.
 //
 // - Add the following functionality:
-//   - Create a View Matrix from (eye, center, up) parameters.
-//   - Create an Orthographic Projection Matrix from (left-right, 
+//   [DONE] - Create a View Matrix from (eye, center, up) parameters.
+//   [DONE] - Create an Orthographic Projection Matrix from (left-right, 
 //     bottom-top, near-far) parameters.
-//   - Create a Perspective Projection Matrix from (fovy, aspect,
+//   [DONE] - Create a Perspective Projection Matrix from (fovy, aspect,
 //     nearZ, farZ) parameters.
 //   - Implement rotations through quaternions.
 //
@@ -63,6 +63,8 @@
 #include "model_setup.h"
 #include "uniformsAttribs.h"
 #include "toggling.h"
+
+#include "utils.h"
 
 #define CAPTION "Hello New World"
 
@@ -111,6 +113,11 @@ void destroyShaderProgram()
 
 /////////////////////////////////////////////////////////////////////// SCENE
 
+Matrix4 Proj1 = Matrices::orthoProj(-2, 2, -2, 2, -1, 5);
+Matrix4 Proj2 = Matrices::perspectiveProj(deg2Rad(45.0), 4.0 / 3.0, 0, 5.0);
+Vector3f EyePos = Vector3f(0, 0, 2);
+Vector3f CenterPos = Vector3f(0, 0, 0);
+Matrix4 TestView = Matrices::lookAt(EyePos, CenterPos, Vector3f(0, 1, 0));
 const Matrix4 I = Matrices::identity();
 const Matrix4 TangramScale = Matrices::scale(.4, .4, 1);
 
@@ -118,30 +125,28 @@ Toggler *toggler;
 
 void drawScene()
 {
+	Matrix4 projView = Proj2 * TestView;
+
 	ShaderPrograms::PassThroughProgram->use();
 	GLint matrixID = ShaderPrograms::PassThroughProgram->getUniformId(Uniforms::MATRIX);
 	//draw background plane
-	glUniformMatrix4fv(matrixID, 1, GL_FALSE, I.colMajorArray());
+	glUniformMatrix4fv(matrixID, 1, GL_FALSE, projView.colMajorArray());
+	//glUniformMatrix4fv(matrixID, 1, GL_FALSE, I.colMajorArray());
 	Models::BackPlaneModel.drawModel();
 	ShaderPrograms::PassThroughProgram->removeFromUse();
 	
-	//tangramShaderProgram->use();
 	ShaderProgram *currProg = toggler->currentTangramShaderProgram();
 	currProg->use();
-	//for each model in curr_config
-	//get model matrix
-	//send model matrix to shaders
-	//draw model
 	SceneConfiguration *currSceneConfig = toggler->currentSceneConfiguration();
 	for (std::string objName : Scenes::ObjectNames::ALL_NAMES) {
 		SceneConfiguration::WorldObject wrlObj = currSceneConfig->getWorldObject(objName);
 		Matrix4 modelMatrix = wrlObj.getModelMatrix();
-		modelMatrix = TangramScale * modelMatrix;
+		//modelMatrix = TangramScale * modelMatrix;
+		modelMatrix = projView * TangramScale * modelMatrix;//TODO remove test, implement matrix2shader passing
 		glUniformMatrix4fv(matrixID, 1, GL_FALSE, modelMatrix.colMajorArray());
 		wrlObj.drawRenderModel();
 	}
 	currProg->removeFromUse();
-	//tangramShaderProgram->removeFromUse();
 
 	checkOpenGLError("ERROR: Could not draw scene.");
 }
@@ -198,6 +203,43 @@ void keyPressed(unsigned char key, int x, int y)
 	switch (key){
 	case 't':
 		toggler->toggle();
+		break;
+		//TODO remove tests
+	case 'w':
+		EyePos += Vector3f(0, .2, 0);
+		break;
+	case 's':
+		EyePos -= Vector3f(0, .2, 0);
+		break;
+	case 'a':
+		EyePos -= Vector3f(.2, 0, 0);
+		break;
+	case 'd':
+		EyePos += Vector3f(.2, 0, 0);
+		break;
+	case 'y':
+		CenterPos += Vector3f(0, .2, 0);
+		break;
+	case 'h':
+		CenterPos -= Vector3f(0, .2, 0);
+		break;
+	case 'g':
+		CenterPos -= Vector3f(.2, 0, 0);
+		break;
+	case 'j':
+		CenterPos += Vector3f(.2, 0, 0);
+		break;
+	}
+	switch (key) {
+	case 'w':
+	case 's':
+	case 'a':
+	case 'd':
+	case 'y':
+	case 'h':
+	case 'g':
+	case 'j':
+		TestView = Matrices::lookAt(EyePos, CenterPos, Vector3f(0, 1, 0));
 		break;
 	}
 }

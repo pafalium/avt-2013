@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\assignment_2.cpp" />
+    <ClCompile Include="..\src\assignment_3.cpp" />
     <ClCompile Include="..\src\matrices.cpp" />
     <ClCompile Include="..\src\matrices_tests.cpp" />
     <ClCompile Include="..\src\model_setup.cpp" />
