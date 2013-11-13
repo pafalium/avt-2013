@@ -3,9 +3,9 @@
 // Assignment 3 consists in the following:
 //
 // - Create the following changes to your scene, making it fully 3D:
-//   - Extrude your TANs into the 3rd dimension. The TANs should have
+//   [DONE] - Extrude your TANs into the 3rd dimension. The TANs should have
 //     slightly different "heights".
-//   - The new faces of each TAN should share the same hue as the 
+//   [NORMALS][DONE]- The new faces of each TAN should share the same hue as the 
 //     original top face color but have different levels of saturation 
 //     and brightness (use an external app if needed).
 //   - The shape is now built vertically (i.e. rather than horizontally
@@ -128,7 +128,7 @@ void drawScene()
 	for (std::string objName : Scenes::ObjectNames::ALL_NAMES) {
 		SceneConfiguration::WorldObject wrlObj = currSceneConfig->getWorldObject(objName);
 		Matrix4 modelMatrix = wrlObj.getModelMatrix();
-		modelMatrix = TangramScale * modelMatrix;
+		//modelMatrix = TangramScale * modelMatrix;
 		currProg->sendUniformMat4(Uniforms::MATRIX, modelMatrix);
 		currProg->sendUniformVec3(Uniforms::COLOR, ObjectsColor);
 		wrlObj.drawRenderModel();
@@ -192,8 +192,15 @@ void keyPressed(unsigned char key, int x, int y)
 	case 't':
 		toggler->toggle();
 		break;
+	case 'q':
+		MyCamera->addRadius(-0.1f);
+		break;
+	case 'a':
+		MyCamera->addRadius(0.1f);
+		break;
 	case 'p':
 		MyCamera->nextProjection();
+		break;
 	}
 }
 
@@ -217,7 +224,7 @@ void mouseMotion(int x, int y)
 void mouseWheel(int wheel, int dir, int x, int y)
 {
 	float incr = dir / 10.0f;
-	MyCamera->addRadius(incr);
+	MyCamera->addZoom(incr);
 }
 
 /////////////////////////////////////////////////////////////////////// SETUP
@@ -254,7 +261,7 @@ void setupOpenGL() {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);
-	glDepthRange(0.0, 1.0);
+	glDepthRange(-1.0, 1.0);
 	glClearDepth(1.0);
 	glEnable(GL_CULL_FACE);
 	glCullFace(GL_BACK);

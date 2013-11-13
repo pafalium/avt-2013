@@ -158,29 +158,29 @@ namespace Matrices {
 		GLfloat tmb = 1.0 / (t - b);
 		GLfloat fmn = 1.0 / (f - n);
 
-		GLfloat tx = (r + l)*rml;
-		GLfloat ty = (t + b)*tmb;
-		GLfloat tz = (f + n)*fmn;
+		GLfloat tx = -(r + l)*rml;
+		GLfloat ty = -(t + b)*tmb;
+		GLfloat tz = -(f + n)*fmn;
 
 		std::vector<GLfloat> ortData =
 		{
 			2*rml, 0, 0, 0,
 			0, 2*tmb, 0, 0,
-			0, 0, 2*fmn, 0,
+			0, 0, -2*fmn, 0,
 			tx, ty, tz, 1
 		};
 		return Matrix4(ortData);
 	}
 	Matrix4 perspectiveProj(GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 	{
-		GLfloat d = 1.0 / std::tan(fovy / 2.0);
-		GLfloat nmf = 1.0 / (zNear - zFar);
+		GLfloat d = 1.0f / std::tan(fovy / 2.0f);
+		GLfloat nmf = 1.0f / (zNear - zFar);
 		
 		std::vector<GLfloat> perspData =
 		{
 			d / aspect, 0, 0, 0,
 			0, d, 0, 0,
-			0, 0, -(zFar + zNear)*nmf, -1.0,
+			0, 0, (zFar + zNear)*nmf, -1.0f,
 			0, 0, (2 * zFar*zNear)*nmf, 0
 		};
 		return Matrix4(perspData);

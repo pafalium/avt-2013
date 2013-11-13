@@ -84,13 +84,13 @@ namespace Scenes {
 	//TODO add class for drawing giving a color as an uniform
 	void setupSquareTangramConfig()
 	{
-		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_1, Models::BigTriModel, Vector3f(0, .66666, .9), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_2, Models::BigTriModel, Vector3f(-.66666, 0, .8), deg2Rad(90));
-		SquareTangramConfig.addWorldObject(ObjectNames::MED_TRI_1, Models::MedTriModel, Vector3f(.66666, -.66666, .85), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_1, Models::SmallTriModel, Vector3f(.83333, .5, .83), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_2, Models::SmallTriModel, Vector3f(0, -.33333, .84), deg2Rad(-90));
-		SquareTangramConfig.addWorldObject(ObjectNames::SQR, Models::SquareModel, Vector3f(.5, 0, .835), 0);
-		SquareTangramConfig.addWorldObject(ObjectNames::QUAD, Models::QuadModel, Vector3f(-.25, -.75, .88), deg2Rad(90));
+		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_1, Models::BigTriModel, Vector3f(0, .66666, 0), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_2, Models::BigTriModel, Vector3f(-.66666, 0, 0), deg2Rad(90));
+		SquareTangramConfig.addWorldObject(ObjectNames::MED_TRI_1, Models::MedTriModel, Vector3f(.66666, -.66666, 0), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_1, Models::SmallTriModel, Vector3f(.83333, .5, 0), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::SML_TRI_2, Models::SmallTriModel, Vector3f(0, -.33333, 0), deg2Rad(-90));
+		SquareTangramConfig.addWorldObject(ObjectNames::SQR, Models::SquareModel, Vector3f(.5, 0, 0), 0);
+		SquareTangramConfig.addWorldObject(ObjectNames::QUAD, Models::QuadModel, Vector3f(-.25, -.75, 0), deg2Rad(90));
 	}
 
 	void setupFigureTangramConfig()
