@@ -2,12 +2,6 @@
 
 #include "uniformsAttribs.h"
 
-VertexAttribChannel::VertexAttribChannel(std::string name, GLuint index)
-:attribName(name), attribIndex(index){}
-
-bool VertexAttribChannel::operator<(const VertexAttribChannel& other) const{
-	return attribName < other.attribName;
-}
 
 namespace VertexAttribs {
 	namespace Names {
@@ -26,6 +20,7 @@ namespace VertexAttribs {
 
 namespace Uniforms {
 	const std::string MATRIX = "Matrix";
+	const std::string COLOR = "Color";
 }
 
 namespace UniformBlocks {
@@ -36,6 +31,3 @@ namespace UniformBlocks {
 		const GLuint SHARED_MATRICES = 0;
 	}
 }
-
-
-std::set<std::string> UniformNames = {Uniforms::MATRIX};

@@ -54,6 +54,7 @@ public:
 	// Get a uniform id by uniform name.
 	GLint getUniformId(const std::string &uniformName);
 	void sendUniformMat4(const std::string &uniformName, const Matrix4 &mat);
+	void sendUniformVec3(const std::string &uniformName, const Vector3f &vec);
 private:
 	void displayShaderCompileLog(const std::string &message, const Shader &shader);
 	void displayProgramLinkingLog(const std::string &message);

@@ -61,6 +61,9 @@
     <ClCompile Include="..\src\assignment_3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\src\vertex.vsh">
@@ -113,5 +116,31 @@
     <ClInclude Include="..\src\vector3f.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\camera_setup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\resources\BackPlane.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="..\resources\BigTri.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="..\resources\MedTri.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="..\resources\Quad.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="..\resources\SmallTri.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="..\resources\Square.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
   </ItemGroup>
 </Project>

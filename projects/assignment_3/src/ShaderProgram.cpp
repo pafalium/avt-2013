@@ -177,6 +177,13 @@ void ShaderProgram::sendUniformMat4(const std::string &uniformName, const Matrix
 }
 
 
+void ShaderProgram::sendUniformVec3(const std::string &uniformName, const Vector3f &vec)
+{
+	GLint uniformId = m_uniforms[uniformName].id;
+	glUniform3f(uniformId, vec.x(), vec.y(), vec.z());
+}
+
+
 // Returns this program's OpenGL name.
 GLuint ShaderProgram::programName()
 {

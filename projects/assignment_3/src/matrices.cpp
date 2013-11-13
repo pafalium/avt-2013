@@ -4,6 +4,10 @@
 #include <cmath>
 
 /////////////////////////////////////////////// CONSTRUCTORS
+Matrix4::Matrix4(GLfloat val)
+: m_data(16, val)
+{}
+
 Matrix4::Matrix4(std::vector<GLfloat> elems, bool isElemsRowMajor)
 : m_data(16)
 {

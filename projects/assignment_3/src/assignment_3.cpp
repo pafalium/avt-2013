@@ -22,9 +22,9 @@
 //   - Implement rotations through quaternions.
 //
 // - Add the following dynamics to the application:
-//   - Create a spherical 3D camera controlled by the mouse allowing to 
+//   [DONE] - Create a spherical 3D camera controlled by the mouse allowing to 
 //     visualize the scene through all its angles.
-//   - Change perspective from orthographic to perspective and back as
+//   [DONE] - Change perspective from orthographic to perspective and back as
 //     a response to pressing the key 'p'.
 //   - The scene starts with the 7 TANs in their original square 
 //     configuration, laying flat and horizontally on the surface.
@@ -55,16 +55,19 @@
 #include "GL/glew.h"
 #include "GL/freeglut.h"
 
+#include "matrices.h"
+#include "utils.h"
 
 #include "ShaderProgram.h"
 #include "RenderModel.h"
-#include "shader_setup.h"
-#include "matrices.h"
-#include "model_setup.h"
-#include "uniformsAttribs.h"
-#include "toggling.h"
 
-#include "utils.h"
+#include "uniformsAttribs.h"
+#include "shader_setup.h"
+#include "model_setup.h"
+#include "toggling.h"
+#include "camera.h"
+#include "camera_setup.h"
+
 
 #define CAPTION "Hello New World"
 
@@ -90,6 +93,7 @@ void destroyShaderProgram()
 	checkOpenGLError("ERROR: Could not destroy shaders.");
 }
 
+
 /////////////////////////////////////////////////////////////////////// SCENE
 
 Matrix4 Proj1 = Matrices::orthoProj(-2, 2, -2, 2, -1, 5);
@@ -99,17 +103,22 @@ Vector3f CenterPos = Vector3f(0, 0, 0);
 Matrix4 TestView = Matrices::lookAt(EyePos, CenterPos, Vector3f(0, 1, 0));
 const Matrix4 I = Matrices::identity();
 const Matrix4 TangramScale = Matrices::scale(.4, .4, 1);
+const Vector3f ObjectsColor(0.0f, 1.0f, 1.0f);
+const Vector3f BackColor(.8f, .8f, 0.0f);
 
 Toggler *toggler;
 
 void drawScene()
 {
-	ShaderPrograms::sendSharedMatBufMatrix(0, TestView);
-	ShaderPrograms::sendSharedMatBufMatrix(1, Proj2);
+	//ShaderPrograms::sendSharedMatBufMatrix(0, TestView);
+	//ShaderPrograms::sendSharedMatBufMatrix(1, Proj2);
+	ShaderPrograms::sendSharedMatBufMatrix(0, MyCamera->viewMatrix());
+	ShaderPrograms::sendSharedMatBufMatrix(1, MyCamera->projMatrix());
 
 	//draw background plane
 	ShaderPrograms::PassThroughProgram->use();
 	ShaderPrograms::PassThroughProgram->sendUniformMat4(Uniforms::MATRIX, I);
+	ShaderPrograms::PassThroughProgram->sendUniformVec3(Uniforms::COLOR, BackColor);
 	Models::BackPlaneModel->drawModel();
 	ShaderPrograms::PassThroughProgram->removeFromUse();
 	
@@ -121,6 +130,7 @@ void drawScene()
 		Matrix4 modelMatrix = wrlObj.getModelMatrix();
 		modelMatrix = TangramScale * modelMatrix;
 		currProg->sendUniformMat4(Uniforms::MATRIX, modelMatrix);
+		currProg->sendUniformVec3(Uniforms::COLOR, ObjectsColor);
 		wrlObj.drawRenderModel();
 	}
 	currProg->removeFromUse();
@@ -136,6 +146,7 @@ void cleanup()
 	Models::cleanupModels();
 	//cleanup toggling
 	delete toggler;
+	cleanupCamera();
 }
 
 void display()
@@ -181,44 +192,32 @@ void keyPressed(unsigned char key, int x, int y)
 	case 't':
 		toggler->toggle();
 		break;
-		//TODO remove tests
-	case 'w':
-		EyePos += Vector3f(0, .2, 0);
-		break;
-	case 's':
-		EyePos -= Vector3f(0, .2, 0);
-		break;
-	case 'a':
-		EyePos -= Vector3f(.2, 0, 0);
-		break;
-	case 'd':
-		EyePos += Vector3f(.2, 0, 0);
-		break;
-	case 'y':
-		CenterPos += Vector3f(0, .2, 0);
-		break;
-	case 'h':
-		CenterPos -= Vector3f(0, .2, 0);
-		break;
-	case 'g':
-		CenterPos -= Vector3f(.2, 0, 0);
-		break;
-	case 'j':
-		CenterPos += Vector3f(.2, 0, 0);
-		break;
+	case 'p':
+		MyCamera->nextProjection();
 	}
-	switch (key) {
-	case 'w':
-	case 's':
-	case 'a':
-	case 'd':
-	case 'y':
-	case 'h':
-	case 'g':
-	case 'j':
-		TestView = Matrices::lookAt(EyePos, CenterPos, Vector3f(0, 1, 0));
-		break;
-	}
+}
+
+int LastMousePosX, LastMousePosY;
+
+void mouse(int button, int state, int x, int y)
+{
+	LastMousePosX = x;
+	LastMousePosY = y;
+}
+
+void mouseMotion(int x, int y)
+{
+	
+	MyCamera->addLongitude(-x + LastMousePosX);
+	MyCamera->addLatitude(y - LastMousePosY);
+	LastMousePosX = x;
+	LastMousePosY = y;
+}
+
+void mouseWheel(int wheel, int dir, int x, int y)
+{
+	float incr = dir / 10.0f;
+	MyCamera->addRadius(incr);
 }
 
 /////////////////////////////////////////////////////////////////////// SETUP
@@ -241,6 +240,9 @@ void setupCallbacks()
 	glutIdleFunc(idle);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyPressed);
+	glutMouseFunc(mouse);
+	glutMotionFunc(mouseMotion);
+	glutMouseWheelFunc(mouseWheel);
 	glutTimerFunc(0,timer,0);
 	//lerp test
 	glutTimerFunc(0, lerpTestTimer, 0);
@@ -295,6 +297,7 @@ void init(int argc, char* argv[])
 	setupOpenGL();
 	createShaderProgram();
 	setupScenes();
+	setupCamera();
 	setupToggling();
 	setupCallbacks();
 }

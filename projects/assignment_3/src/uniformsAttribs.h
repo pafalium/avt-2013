@@ -8,12 +8,6 @@
 #include <string>
 #include <set>
 
-struct VertexAttribChannel {
-	std::string attribName;
-	GLuint attribIndex;
-	VertexAttribChannel(std::string name, GLuint index);
-	bool operator<(const VertexAttribChannel& other) const;
-};
 
 namespace VertexAttribs {
 	namespace Names {
@@ -32,6 +26,7 @@ namespace VertexAttribs {
 
 namespace Uniforms {
 	extern const std::string MATRIX;
+	extern const std::string COLOR;
 }
 
 namespace UniformBlocks {
@@ -42,9 +37,5 @@ namespace UniformBlocks {
 		extern const GLuint SHARED_MATRICES;
 	}
 }
-
-extern std::set<VertexAttribChannel> VertexAttribChannels;
-
-extern std::set<std::string> UniformNames;
 
 #endif

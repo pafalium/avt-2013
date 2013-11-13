@@ -7,6 +7,7 @@ in vec3 in_Normal;
 in vec2 in_TexCoord;
 
 uniform mat4 Matrix;
+uniform vec3 Color;
 
 layout (std140) uniform SharedMatrices {
     mat4 View;
@@ -20,5 +21,8 @@ vec3 LightDir = vec3(-1,-1,-1);
 void main()
 {
 	gl_Position = Projection * View * Matrix * vec4(in_Position,1.0f);
-	ex_Color = vec4(dot(normalize(LightDir),in_Normal));
+	vec3 normLightDir = normalize(LightDir);
+	vec4 transNormal = normalize(View * Matrix * vec4(in_Normal,0.0f));
+	float lightFactor = abs(dot(normLightDir,transNormal.xyz));
+	ex_Color = vec4(Color*lightFactor,1.0f);
 } 

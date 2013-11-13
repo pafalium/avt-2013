@@ -15,6 +15,7 @@ class Matrix4 {
 	std::vector<GLfloat> m_data;
 
 public:
+	Matrix4(GLfloat val);
 	Matrix4(std::vector<GLfloat> elems, bool isElemsRowMajor=false);
 
 	//this method will NOT verify that indexes are within bounds.

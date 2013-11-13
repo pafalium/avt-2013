@@ -55,6 +55,7 @@ namespace ShaderPrograms {
 		PassThroughProgram->addAttrib(VertexAttribs::Names::NORMAL, VertexAttribs::Indexes::NORMAL);
 		PassThroughProgram->addAttrib(VertexAttribs::Names::TEXCOORD, VertexAttribs::Indexes::TEXCOORD);
 		PassThroughProgram->addUniform(Uniforms::MATRIX);
+		PassThroughProgram->addUniform(Uniforms::COLOR);
 		PassThroughProgram->addUniformBlock(UniformBlocks::Names::SHARED_MATRICES, 
 			UniformBlocks::BindPoints::SHARED_MATRICES, SharedMatBufID);
 		PassThroughProgram->createCompileLink();
@@ -72,6 +73,7 @@ namespace ShaderPrograms {
 		MonoChromeProgram->addAttrib(VertexAttribs::Names::NORMAL, VertexAttribs::Indexes::NORMAL);
 		MonoChromeProgram->addAttrib(VertexAttribs::Names::TEXCOORD, VertexAttribs::Indexes::TEXCOORD);
 		MonoChromeProgram->addUniform(Uniforms::MATRIX);
+		MonoChromeProgram->addUniform(Uniforms::COLOR);
 		MonoChromeProgram->addUniformBlock(UniformBlocks::Names::SHARED_MATRICES,
 			UniformBlocks::BindPoints::SHARED_MATRICES, SharedMatBufID);
 		MonoChromeProgram->createCompileLink();

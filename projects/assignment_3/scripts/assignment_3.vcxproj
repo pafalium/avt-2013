@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\assignment_3.cpp" />
+    <ClCompile Include="..\src\camera.cpp" />
     <ClCompile Include="..\src\matrices.cpp" />
     <ClCompile Include="..\src\matrices_tests.cpp" />
     <ClCompile Include="..\src\model_setup.cpp" />
@@ -32,6 +33,8 @@
     <None Include="..\src\vertex.vsh" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\camera.h" />
+    <ClInclude Include="..\src\camera_setup.h" />
     <ClInclude Include="..\src\matrices.h" />
     <ClInclude Include="..\src\matrices_tests.h" />
     <ClInclude Include="..\src\model_setup.h" />
@@ -45,6 +48,26 @@
     <ClInclude Include="..\src\uniformsAttribs.h" />
     <ClInclude Include="..\src\utils.h" />
     <ClInclude Include="..\src\vector3f.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="..\resources\BackPlane.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="..\resources\BigTri.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="..\resources\MedTri.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="..\resources\Quad.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="..\resources\SmallTri.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
+    <Object Include="..\resources\Square.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{05093FC8-9DDC-4082-B093-81B6F4EA93C7}</ProjectGuid>
