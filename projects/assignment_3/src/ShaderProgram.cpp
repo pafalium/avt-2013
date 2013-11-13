@@ -3,14 +3,12 @@
 #include <iostream>
 
 #include "uniformsAttribs.h"
+#include "utils.h"
 
 
 // Creates a new program and its shaders.
-ShaderProgram::ShaderProgram(const std::string &vertexSource, const std::string &fragmentSource)
-: m_vertexShader(GL_VERTEX_SHADER, vertexSource), 
-m_fragmentShader(GL_FRAGMENT_SHADER, fragmentSource),
-m_programName(0),
-m_uniformIds()
+ShaderProgram::ShaderProgram()
+: m_programName(0), m_shaders(), m_uniforms(), m_attribs(), m_uniformBlocks()
 {
 }
 
@@ -19,10 +17,48 @@ m_uniformIds()
 ShaderProgram::~ShaderProgram()
 {
 	glUseProgram(0);
-	glDetachShader(m_programName, m_vertexShader.shaderName());
-	glDetachShader(m_programName, m_fragmentShader.shaderName());
+	for (std::map<GLenum, Shader *>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
+	{
+		glDetachShader(m_programName, (it->second)->shaderName());
+		delete it->second;
+	}
 
 	glDeleteProgram(m_programName);
+}
+
+
+void ShaderProgram::addShader(GLenum shaderType, const std::string &shaderSource)
+{
+	Shader *oldShader = m_shaders[shaderType];
+	if (oldShader != 0)
+		delete oldShader;
+	m_shaders[shaderType] = new Shader(shaderType, shaderSource);
+}
+
+
+void ShaderProgram::addAttrib(const std::string &name, GLuint index)
+{
+	AttribData attrib;
+	attrib.name = name; attrib.index = index;
+	m_attribs[name] = attrib;
+}
+
+
+void ShaderProgram::addUniform(const std::string &uniformName)
+{
+	UniformData uni;
+	uni.name = uniformName; uni.id = -1;
+	m_uniforms[uniformName] = uni;
+}
+
+
+void ShaderProgram::addUniformBlock(const std::string &blockName, GLuint bindPoint, GLuint bufferID)
+{
+	UniformBlockData uniBlock;
+	uniBlock.name = blockName; 
+	uniBlock.bindPoint = bindPoint; 
+	uniBlock.bufferID = bufferID;
+	m_uniformBlocks[blockName] = uniBlock;
 }
 
 
@@ -30,34 +66,37 @@ ShaderProgram::~ShaderProgram()
 void ShaderProgram::createCompileLink()
 {
 	m_programName = glCreateProgram();
-	m_vertexShader.createShader();
-	m_fragmentShader.createShader();
+	for (std::map<GLenum, Shader *>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
+	{
+		(it->second)->createShader();
+		glAttachShader(m_programName,(it->second)->shaderName());
+	}
 
-	// attach shaders
-	glAttachShader(m_programName, m_vertexShader.shaderName());
-	glAttachShader(m_programName, m_fragmentShader.shaderName());
+	checkOpenGLError("Error attaching shaders.");
 
 	bool shaderCompilationFailed = false;
-	// compile vertex shader
-	GLint vertexCompStatus = m_vertexShader.compile();
-	if (vertexCompStatus == GL_FALSE){
-		shaderCompilationFailed = true;
-		displayShaderCompileLog("Vertex Shader compilation failed", m_vertexShader);
+	for (std::map<GLenum, Shader *>::iterator it = m_shaders.begin(); it != m_shaders.end(); ++it)
+	{
+		GLint compileStatus = (it->second)->compile();
+		if (compileStatus == GL_FALSE){
+			shaderCompilationFailed = true;
+			displayShaderCompileLog("Shader compilation failed", *(it->second));
+		}
 	}
-	// compile fragment shader
-	GLint fragmentCompStatus = m_fragmentShader.compile();
-	if (fragmentCompStatus == GL_FALSE){
-		shaderCompilationFailed = true;
-		displayShaderCompileLog("Fragment Shader compilation failed", m_fragmentShader);
-	}
+
+	checkOpenGLError("Error compiling shaders.");
+	
 	// fail if some compilation failed
 	if (shaderCompilationFailed)
 		OutStreams::ShaderLog << "ERROR: Shader compilation failed" << std::endl;
 
 	// "bind" vertex attribute channels
-	for (VertexAttribChannel vac : VertexAttribChannels){
-		glBindAttribLocation(m_programName, vac.attribIndex, vac.attribName.c_str());
+	for (auto& attrib : m_attribs){
+		glBindAttribLocation(m_programName, attrib.second.index, attrib.second.name.c_str());
 	}
+
+	checkOpenGLError("Error binding attrib locations.");
+
 	// link program and check for errors
 	GLint linkResult = linkProgram();
 	if (linkResult == GL_FALSE) {
@@ -65,9 +104,22 @@ void ShaderProgram::createCompileLink()
 	}
 
 	// get uniform ids
-	for (std::string uniformName : UniformNames) {
-		m_uniformIds[uniformName] = glGetUniformLocation(m_programName, uniformName.c_str());
+	for (std::map<std::string, UniformData>::iterator it = m_uniforms.begin(); it != m_uniforms.end(); ++it) {
+		const std::string &uniName = it->second.name;
+		GLint loc = glGetUniformLocation(m_programName, uniName.c_str());
+		it->second.id = loc;
 	}
+
+	checkOpenGLError("Error getting unfiorm locations.");
+
+	// bind uniform blocks (the buffer still needs to be assigned to the same bind point)
+	for (std::map<std::string, UniformBlockData>::iterator it = m_uniformBlocks.begin(); it != m_uniformBlocks.end(); ++it) {
+		const std::string &blockName = it->second.name;
+		GLuint blockIndex = glGetUniformBlockIndex(m_programName, blockName.c_str());
+		glUniformBlockBinding(m_programName, blockIndex, it->second.bindPoint);
+	}
+
+	checkOpenGLError("Error binding uniform blocks.");
 }
 
 GLint ShaderProgram::linkProgram()
@@ -114,7 +166,14 @@ void ShaderProgram::displayShaderCompileLog(const std::string &message, const Sh
 
 GLint ShaderProgram::getUniformId(const std::string &uniformName)
 {
-	return m_uniformIds[uniformName];
+	return m_uniforms[uniformName].id;
+}
+
+
+void ShaderProgram::sendUniformMat4(const std::string &uniformName, const Matrix4 &mat)
+{
+	GLint uniformId = m_uniforms[uniformName].id;
+	glUniformMatrix4fv(uniformId, 1, GL_FALSE, mat.colMajorArray());
 }
 
 

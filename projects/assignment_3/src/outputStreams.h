@@ -6,6 +6,7 @@
 
 namespace OutStreams {
 	extern std::ostream &ShaderLog;
+	extern std::ostream &OpenGLLog;
 }
 
 #endif

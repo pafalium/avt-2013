@@ -31,9 +31,6 @@
     <ClCompile Include="..\src\outputStreams.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\readFile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\RenderModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -87,9 +84,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\outputStreams.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\readFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\src\RenderModel.h">

@@ -7,19 +7,40 @@
 #include <map>
 #include "outputStreams.h"
 #include "Shader.h"
+#include "matrices.h"
 
+struct AttribData {
+	std::string name;
+	GLuint index;
+};
+
+struct UniformData {
+	std::string name;
+	GLint id;
+};
+
+struct UniformBlockData {
+	std::string name;
+	GLuint bindPoint;
+	GLuint bufferID;
+};
 
 class ShaderProgram
 {
 	GLuint m_programName;
-	Shader m_vertexShader;
-	Shader m_fragmentShader;
-	std::map<std::string, GLint> m_uniformIds;
+	std::map<GLenum, Shader *> m_shaders;
+	std::map<std::string, AttribData> m_attribs;
+	std::map<std::string, UniformData> m_uniforms;
+	std::map<std::string, UniformBlockData> m_uniformBlocks;
 public:
-	// Creates a new program and its shaders (no OpenGL calls).
-	ShaderProgram(const std::string &vertexSource, const std::string &fragmentSource);
+	// Create a new OpenGL shader program.
+	ShaderProgram();
 	// Detach shaders, destroy shaders.
 	~ShaderProgram();
+	void addShader(GLenum shaderType, const std::string &shaderSource);
+	void addAttrib(const std::string &name, GLuint index);
+	void addUniform(const std::string &uniformName);
+	void addUniformBlock(const std::string &blockName, GLuint bindPoint, GLuint bufferID);
 	// Create, compile and link program.
 	// After calling this mehtod the program is/should be ready for execution.
 	// TODO uniform ids are not being gathered.
@@ -32,6 +53,7 @@ public:
 	void removeFromUse();
 	// Get a uniform id by uniform name.
 	GLint getUniformId(const std::string &uniformName);
+	void sendUniformMat4(const std::string &uniformName, const Matrix4 &mat);
 private:
 	void displayShaderCompileLog(const std::string &message, const Shader &shader);
 	void displayProgramLinkingLog(const std::string &message);

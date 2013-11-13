@@ -16,7 +16,6 @@
     <ClCompile Include="..\src\matrices_tests.cpp" />
     <ClCompile Include="..\src\model_setup.cpp" />
     <ClCompile Include="..\src\outputStreams.cpp" />
-    <ClCompile Include="..\src\readFile.cpp" />
     <ClCompile Include="..\src\RenderModel.cpp" />
     <ClCompile Include="..\src\sceneConfigurations.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
@@ -37,7 +36,6 @@
     <ClInclude Include="..\src\matrices_tests.h" />
     <ClInclude Include="..\src\model_setup.h" />
     <ClInclude Include="..\src\outputStreams.h" />
-    <ClInclude Include="..\src\readFile.h" />
     <ClInclude Include="..\src\RenderModel.h" />
     <ClInclude Include="..\src\sceneConfigurations.h" />
     <ClInclude Include="..\src\Shader.h" />
@@ -91,6 +89,7 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

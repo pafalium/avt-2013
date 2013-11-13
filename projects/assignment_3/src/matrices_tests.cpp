@@ -3,8 +3,7 @@
 #include <iostream>
 #include "matrices.h"
 #include "matrices_tests.h"
-
-static const GLfloat PI = 3.14159265359;
+#include "utils.h"
 
 void testIdentity(){
 	Matrix4 I = Matrices::identity();
@@ -25,9 +24,9 @@ void testScale() {
 }
 
 void testRotate() {
-	Matrix4 rotX90 = Matrices::axisRotate(1, 0, 0, PI / 2.0);
-	Matrix4 rotY90 = Matrices::axisRotate(0, 1, 0, PI / 2.0);
-	Matrix4 rotZ90 = Matrices::axisRotate(0, 0, 1, PI / 2.0);
+	Matrix4 rotX90 = Matrices::axisRotate(1, 0, 0, PI_CONSTANT / 2.0);
+	Matrix4 rotY90 = Matrices::axisRotate(0, 1, 0, PI_CONSTANT / 2.0);
+	Matrix4 rotZ90 = Matrices::axisRotate(0, 0, 1, PI_CONSTANT / 2.0);
 
 	std::cout << "X rot 90" << std::endl;
 	std::cout << rotX90 << std::endl;
@@ -52,7 +51,7 @@ void testIdentityMultiply() {
 }
 
 void testRotateTranslate() {
-	Matrix4 Rot = Matrices::axisRotate(0, 0, 1, PI);
+	Matrix4 Rot = Matrices::axisRotate(0, 0, 1, PI_CONSTANT);
 	Matrix4 Tra = Matrices::translate(1, 0, -2);
 
 	std::cout << "Rot:" << std::endl;

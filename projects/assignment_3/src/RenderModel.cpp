@@ -7,8 +7,9 @@
 
 std::map<std::string, size_t> VertAttrOffsets;
 
-RenderModel::RenderModel(const std::vector<Vertex> &verts, const std::vector<GLuint> &inds) :
-m_vertices(verts), m_indexes(inds), m_vaoName(0), m_eboName(0), m_vboName(0)
+RenderModel::RenderModel(const std::vector<Vertex> &verts, const std::vector<Normal> &norm, const std::vector<TexCoord> &tex) :
+m_vertices(verts), m_normals(norm), m_texCoords(tex),
+m_vaoName(0), m_vertboName(0), m_normboName(0), m_texboName(0)
 {}
 void RenderModel::setupModel()
 {
@@ -17,23 +18,32 @@ void RenderModel::setupModel()
 	glBindVertexArray(m_vaoName);
 
 	//create buffer (pos,col)
-	glGenBuffers(1, &m_vboName);
-	glBindBuffer(GL_ARRAY_BUFFER, m_vboName);
+	GLuint vbos[3];
+	glGenBuffers(3, vbos);
+	m_vertboName = vbos[0]; m_normboName = vbos[1]; m_texboName = vbos[2];
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertboName);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*m_vertices.size(), m_vertices.data(), GL_STATIC_DRAW);
-
+	glBindBuffer(GL_ARRAY_BUFFER, m_normboName);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Normal)*m_normals.size(), m_normals.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, m_texboName);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(TexCoord)*m_texCoords.size(), m_texCoords.data(), GL_STATIC_DRAW);
 	
 	//set attrib pointers
+	glBindBuffer(GL_ARRAY_BUFFER, m_vertboName);
 	glEnableVertexAttribArray(VertexAttribs::Indexes::POSITION);
-	glVertexAttribPointer(VertexAttribs::Indexes::POSITION, 4, GL_FLOAT, GL_FALSE, 
-		sizeof(Vertex), reinterpret_cast<void *>(offsetof(Vertex, xyzw)));
-	glEnableVertexAttribArray(VertexAttribs::Indexes::COLOR);
-	glVertexAttribPointer(VertexAttribs::Indexes::COLOR, 4, GL_FLOAT, GL_FALSE, 
-		sizeof(Vertex), reinterpret_cast<void *>((offsetof(Vertex, rgba))));
+	glVertexAttribPointer(VertexAttribs::Indexes::POSITION, 3, GL_FLOAT, GL_FALSE, 
+		sizeof(Vertex), 0);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, m_normboName);
+	glEnableVertexAttribArray(VertexAttribs::Indexes::NORMAL);
+	glVertexAttribPointer(VertexAttribs::Indexes::NORMAL, 3, GL_FLOAT, GL_FALSE,
+		sizeof(Normal), 0);
 
-	//create index buffer
-	glGenBuffers(1, &m_eboName);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_eboName);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*m_indexes.size(), m_indexes.data(), GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, m_texboName);
+	glEnableVertexAttribArray(VertexAttribs::Indexes::TEXCOORD);
+	glVertexAttribPointer(VertexAttribs::Indexes::TEXCOORD, 2, GL_FLOAT, GL_FALSE,
+		sizeof(TexCoord), 0);
+
 
 	//unbind
 	glBindVertexArray(0);
@@ -41,7 +51,8 @@ void RenderModel::setupModel()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	glDisableVertexAttribArray(VertexAttribs::Indexes::POSITION);
-	glDisableVertexAttribArray(VertexAttribs::Indexes::COLOR);
+	glDisableVertexAttribArray(VertexAttribs::Indexes::NORMAL);
+	glDisableVertexAttribArray(VertexAttribs::Indexes::TEXCOORD);
 }
 void RenderModel::drawModel() const
 {
@@ -49,7 +60,7 @@ void RenderModel::drawModel() const
 	glBindVertexArray(m_vaoName);
 
 	//draw
-	glDrawElements(GL_TRIANGLES, m_indexes.size(), GL_UNSIGNED_INT, 0);
+	glDrawArrays(GL_TRIANGLES, 0, m_vertices.size());
 
 	//unbind
 	glBindVertexArray(0);
@@ -57,8 +68,9 @@ void RenderModel::drawModel() const
 void RenderModel::cleanupModel()
 {
 	glDeleteVertexArrays(1, &m_vaoName);
-	glDeleteBuffers(1, &m_vboName);
-	glDeleteBuffers(1, &m_eboName);
+	glDeleteBuffers(1, &m_vertboName);
+	glDeleteBuffers(1, &m_normboName);
+	glDeleteBuffers(1, &m_texboName);
 }
 
 void RenderModel::vaoName(GLuint vao)

@@ -72,30 +72,9 @@ int WinX = 640, WinY = 480;
 int WindowHandle = 0;
 unsigned int FrameCount = 0;
 
-//ShaderProgram *PassThroughProgram = 0;
-//ShaderProgram *MonoChromeProgram = 0;
-
 /////////////////////////////////////////////////////////////////////// ERRORS
 
-bool isOpenGLError() {
-	bool isError = false;
-	GLenum errCode;
-	const GLubyte *errString;
-	while ((errCode = glGetError()) != GL_NO_ERROR) {
-		isError = true;
-		errString = gluErrorString(errCode);
-		std::cerr << "OpenGL ERROR [" << errString << "]." << std::endl;
-	}
-	return isError;
-}
 
-void checkOpenGLError(std::string error)
-{
-	if(isOpenGLError()) {
-		std::cerr << error << std::endl;
-		exit(EXIT_FAILURE);
-	}
-}
 
 /////////////////////////////////////////////////////////////////////// SHADERs
 
@@ -125,14 +104,13 @@ Toggler *toggler;
 
 void drawScene()
 {
-	Matrix4 projView = Proj2 * TestView;
+	ShaderPrograms::sendSharedMatBufMatrix(0, TestView);
+	ShaderPrograms::sendSharedMatBufMatrix(1, Proj2);
 
-	ShaderPrograms::PassThroughProgram->use();
-	GLint matrixID = ShaderPrograms::PassThroughProgram->getUniformId(Uniforms::MATRIX);
 	//draw background plane
-	glUniformMatrix4fv(matrixID, 1, GL_FALSE, projView.colMajorArray());
-	//glUniformMatrix4fv(matrixID, 1, GL_FALSE, I.colMajorArray());
-	Models::BackPlaneModel.drawModel();
+	ShaderPrograms::PassThroughProgram->use();
+	ShaderPrograms::PassThroughProgram->sendUniformMat4(Uniforms::MATRIX, I);
+	Models::BackPlaneModel->drawModel();
 	ShaderPrograms::PassThroughProgram->removeFromUse();
 	
 	ShaderProgram *currProg = toggler->currentTangramShaderProgram();
@@ -141,9 +119,8 @@ void drawScene()
 	for (std::string objName : Scenes::ObjectNames::ALL_NAMES) {
 		SceneConfiguration::WorldObject wrlObj = currSceneConfig->getWorldObject(objName);
 		Matrix4 modelMatrix = wrlObj.getModelMatrix();
-		//modelMatrix = TangramScale * modelMatrix;
-		modelMatrix = projView * TangramScale * modelMatrix;//TODO remove test, implement matrix2shader passing
-		glUniformMatrix4fv(matrixID, 1, GL_FALSE, modelMatrix.colMajorArray());
+		modelMatrix = TangramScale * modelMatrix;
+		currProg->sendUniformMat4(Uniforms::MATRIX, modelMatrix);
 		wrlObj.drawRenderModel();
 	}
 	currProg->removeFromUse();

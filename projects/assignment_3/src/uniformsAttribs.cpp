@@ -12,11 +12,15 @@ bool VertexAttribChannel::operator<(const VertexAttribChannel& other) const{
 namespace VertexAttribs {
 	namespace Names {
 		const std::string POSITION = "in_Position";
-		const std::string COLOR = "in_Color";
+		//const std::string COLOR = "in_Color";
+		const std::string NORMAL = "in_Normal";
+		const std::string TEXCOORD = "in_TexCoord";
 	}
 	namespace Indexes {
 		const GLuint POSITION = 0;
-		const GLuint COLOR = 1;
+		//const GLuint COLOR = 1;
+		const GLuint NORMAL = 2;
+		const GLuint TEXCOORD = 3;
 	}
 }
 
@@ -24,10 +28,14 @@ namespace Uniforms {
 	const std::string MATRIX = "Matrix";
 }
 
-std::set<VertexAttribChannel> VertexAttribChannels =
-{
-	VertexAttribChannel(VertexAttribs::Names::POSITION, VertexAttribs::Indexes::POSITION),
-	VertexAttribChannel(VertexAttribs::Names::POSITION, VertexAttribs::Indexes::COLOR)
-};
+namespace UniformBlocks {
+	namespace Names {
+		const std::string SHARED_MATRICES = "SharedMatrices";
+	}
+	namespace BindPoints {
+		const GLuint SHARED_MATRICES = 0;
+	}
+}
+
 
 std::set<std::string> UniformNames = {Uniforms::MATRIX};

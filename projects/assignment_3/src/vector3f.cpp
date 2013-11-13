@@ -2,7 +2,7 @@
 #include "Vector3f.h"
 #include <cmath>
 
-const GLfloat Vector3f::m_Threshold = 1.0e-5;
+const GLfloat Vector3f::m_Threshold = 1.0e-5f;
 
 Vector3f::Vector3f(GLfloat x, GLfloat y, GLfloat z)
 :m_data(3)
@@ -85,7 +85,7 @@ void Vector3f::normalize()
 	GLfloat norma = norm();
 	if (norma < m_Threshold)
 		return;
-	GLfloat factor = 1.0 / norma;
+	GLfloat factor = 1.0f / norma;
 	for (unsigned int i = 0; i < 3; ++i)
 		m_data[i] *= factor;
 }
@@ -94,7 +94,7 @@ void Vector3f::clean()
 {
 	for (unsigned int i = 0; i < 3;++i)
 	if (m_data[i] < m_Threshold)
-		m_data[i] = 0.0;
+		m_data[i] = 0.0f;
 }
 //dot product
 GLfloat Vector3f::dot(const Vector3f &other) const

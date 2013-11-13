@@ -5,18 +5,23 @@
 #include <GL/glew.h>
 #include <vector>
 
-
 struct Vertex {
-	GLfloat xyzw[4];
-	GLfloat rgba[4];
+	float x, y, z;
+};
+struct Normal {
+	float x, y, z;
+};
+struct TexCoord {
+	float s, t;
 };
 
 class RenderModel {
-	GLuint m_vaoName, m_eboName, m_vboName;
+	GLuint m_vaoName, m_vertboName, m_normboName, m_texboName;
 	std::vector<Vertex> m_vertices;
-	std::vector<GLuint> m_indexes;
+	std::vector<Normal> m_normals;
+	std::vector<TexCoord> m_texCoords;
 public:
-	RenderModel(const std::vector<Vertex> &verts, const std::vector<GLuint> &inds);
+	RenderModel(const std::vector<Vertex> &verts, const std::vector<Normal> &norm, const std::vector<TexCoord> &tex);
 	void setupModel();
 	void cleanupModel();
 	void drawModel() const;
