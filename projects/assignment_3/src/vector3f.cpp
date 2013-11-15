@@ -93,7 +93,7 @@ void Vector3f::normalize()
 void Vector3f::clean()
 {
 	for (unsigned int i = 0; i < 3;++i)
-	if (m_data[i] < m_Threshold)
+	if (fabs(m_data[i]) < m_Threshold)
 		m_data[i] = 0.0f;
 }
 //dot product

@@ -15,9 +15,12 @@
     <ClCompile Include="..\src\camera.cpp" />
     <ClCompile Include="..\src\matrices.cpp" />
     <ClCompile Include="..\src\matrices_tests.cpp" />
+    <ClCompile Include="..\src\matrix4.cpp" />
     <ClCompile Include="..\src\model_setup.cpp" />
     <ClCompile Include="..\src\outputStreams.cpp" />
+    <ClCompile Include="..\src\quaternion.cpp" />
     <ClCompile Include="..\src\RenderModel.cpp" />
+    <ClCompile Include="..\src\scene.cpp" />
     <ClCompile Include="..\src\sceneConfigurations.cpp" />
     <ClCompile Include="..\src\Shader.cpp" />
     <ClCompile Include="..\src\ShaderProgram.cpp" />
@@ -33,13 +36,17 @@
     <None Include="..\src\vertex.vsh" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\src\animation.h" />
     <ClInclude Include="..\src\camera.h" />
     <ClInclude Include="..\src\camera_setup.h" />
     <ClInclude Include="..\src\matrices.h" />
     <ClInclude Include="..\src\matrices_tests.h" />
+    <ClInclude Include="..\src\matrix4.h" />
     <ClInclude Include="..\src\model_setup.h" />
     <ClInclude Include="..\src\outputStreams.h" />
+    <ClInclude Include="..\src\quaternion.h" />
     <ClInclude Include="..\src\RenderModel.h" />
+    <ClInclude Include="..\src\scene.h" />
     <ClInclude Include="..\src\sceneConfigurations.h" />
     <ClInclude Include="..\src\Shader.h" />
     <ClInclude Include="..\src\ShaderProgram.h" />

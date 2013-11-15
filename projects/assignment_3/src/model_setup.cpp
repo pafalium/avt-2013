@@ -8,6 +8,8 @@
 
 #include "model_setup.h"
 
+//TODO store all created RenderModels
+//TODO store all created SceneObjects
 
 namespace Models {
 
@@ -81,7 +83,6 @@ namespace Scenes {
 	TwoSceneLerpConfig SqrFigTangramConfig(&SquareTangramConfig,&FigureTangramConfig,1000);
 
 
-	//TODO add class for drawing giving a color as an uniform
 	void setupSquareTangramConfig()
 	{
 		SquareTangramConfig.addWorldObject(ObjectNames::BIG_TRI_1, Models::BigTriModel, Vector3f(0, .66666, 0), 0);
@@ -114,6 +115,103 @@ namespace Scenes {
 		setupSquareTangramConfig();
 		setupFigureTangramConfig();
 		setupSqrFigTangramConfig();
+	}
+}
+
+namespace SingleScene {
+	namespace SceneObjects {
+		SceneObject *BP, *BT1, *BT2, *MT1, *ST1, *ST2, *SQR, *QUAD;
+		namespace Names {
+			const std::string BACK_PLANE = "bkpln";
+			const std::string BIG_TRI_1 = "bgtri1";
+			const std::string BIG_TRI_2 = "bgtri2";
+			const std::string MED_TRI_1 = "mdtri1";
+			const std::string SML_TRI_1 = "smtri1";
+			const std::string SML_TRI_2 = "smtri2";
+			const std::string SQR = "sqr";
+			const std::string QUAD = "quad";
+		}
+		namespace Colors {
+			const Vector3f BACK_PLANE(0.8f, 0.8f, 0.0f);
+			const Vector3f BIG_TRI_1(0.8f,0.1f,0.1f);
+			const Vector3f BIG_TRI_2(0.26f,0.8f,0.0f);
+			const Vector3f MED_TRI_1(0.8f,0.2f,0.0f);
+			const Vector3f SML_TRI_1(0.8f,0.75f,0.0f);
+			const Vector3f SML_TRI_2(0.0f,0.8f,0.34f);
+			const Vector3f SQR(0.0f,0.0f,0.8f);
+			const Vector3f QUAD(0.8f,0.0f,0.65f);
+		}
+		namespace InitLoc {
+			const Vector3f BACK_PLANE(0.0f, 0.0f, 0.0f);
+			const Vector3f BIG_TRI_1(0, .66666, 0);
+			const Vector3f BIG_TRI_2(-.66666, 0, 0);
+			const Vector3f MED_TRI_1(.66666, -.66666, 0);
+			const Vector3f SML_TRI_1(.83333, .5, 0);
+			const Vector3f SML_TRI_2(0, -.33333, 0);
+			const Vector3f SQR(.5, 0, 0);
+			const Vector3f QUAD(-.25, -.75, 0);
+		}
+		namespace InitRot {
+			const Quaternion BACK_PLANE = qFromAngleAxis(0, Vector3f(0.0f, 0.0f, 1.0f));
+			const Quaternion BIG_TRI_1 = qFromAngleAxis(0, Vector3f(0.0f, 0.0f, 1.0f));
+			const Quaternion BIG_TRI_2 = qFromAngleAxis(90.0f, Vector3f(0.0f, 0.0f, 1.0f));
+			const Quaternion MED_TRI_1 = qFromAngleAxis(0, Vector3f(0.0f, 0.0f, 1.0f));
+			const Quaternion SML_TRI_1 = qFromAngleAxis(0, Vector3f(0.0f, 0.0f, 1.0f));
+			const Quaternion SML_TRI_2 = qFromAngleAxis(-90.0f, Vector3f(0.0f, 0.0f, 1.0f));
+			const Quaternion SQR = qFromAngleAxis(0, Vector3f(0.0f, 0.0f, 1.0f));
+			const Quaternion QUAD = qFromAngleAxis(90, Vector3f(0.0f, 0.0f, 1.0f));
+		}
+	}
+
+	Scene *TangramScene;
+
+	void setupSceneObjects()
+	{
+		SceneObjects::BP = new SceneObject(SceneObjects::Names::BACK_PLANE, Models::BackPlaneModel,
+			SceneObjects::InitLoc::BACK_PLANE, SceneObjects::Colors::BACK_PLANE, SceneObjects::InitRot::BACK_PLANE);
+		SceneObjects::BT1 = new SceneObject(SceneObjects::Names::BIG_TRI_1, Models::BigTriModel, 
+			SceneObjects::InitLoc::BIG_TRI_1, SceneObjects::Colors::BIG_TRI_1, SceneObjects::InitRot::BIG_TRI_1);
+		SceneObjects::BT2 = new SceneObject(SceneObjects::Names::BIG_TRI_2, Models::BigTriModel,
+			SceneObjects::InitLoc::BIG_TRI_2, SceneObjects::Colors::BIG_TRI_2, SceneObjects::InitRot::BIG_TRI_2);
+		SceneObjects::MT1 = new SceneObject(SceneObjects::Names::MED_TRI_1, Models::MedTriModel,
+			SceneObjects::InitLoc::MED_TRI_1, SceneObjects::Colors::MED_TRI_1, SceneObjects::InitRot::MED_TRI_1);
+		SceneObjects::ST1 = new SceneObject(SceneObjects::Names::SML_TRI_1, Models::SmallTriModel,
+			SceneObjects::InitLoc::SML_TRI_1, SceneObjects::Colors::SML_TRI_1, SceneObjects::InitRot::SML_TRI_1);
+		SceneObjects::ST2 = new SceneObject(SceneObjects::Names::SML_TRI_2, Models::SmallTriModel,
+			SceneObjects::InitLoc::SML_TRI_2, SceneObjects::Colors::SML_TRI_2, SceneObjects::InitRot::SML_TRI_2);
+		SceneObjects::SQR = new SceneObject(SceneObjects::Names::SQR, Models::SquareModel,
+			SceneObjects::InitLoc::SQR, SceneObjects::Colors::SQR, SceneObjects::InitRot::SQR);
+		SceneObjects::QUAD = new SceneObject(SceneObjects::Names::QUAD, Models::QuadModel,
+			SceneObjects::InitLoc::QUAD, SceneObjects::Colors::QUAD, SceneObjects::InitRot::QUAD);
+	}
+	void cleanupSceneObjects()
+	{
+		delete SceneObjects::BP;
+		delete SceneObjects::BT1;
+		delete SceneObjects::BT2;
+		delete SceneObjects::MT1;
+		delete SceneObjects::QUAD;
+		delete SceneObjects::SQR;
+		delete SceneObjects::ST1;
+		delete SceneObjects::ST2;
+	}
+	void setupScene()
+	{
+		setupSceneObjects();
+		TangramScene = new Scene();
+		TangramScene->addObject(SceneObjects::BP);
+		TangramScene->addObject(SceneObjects::BT1);
+		TangramScene->addObject(SceneObjects::BT2);
+		TangramScene->addObject(SceneObjects::ST1);
+		TangramScene->addObject(SceneObjects::ST2);
+		TangramScene->addObject(SceneObjects::MT1);
+		TangramScene->addObject(SceneObjects::SQR);
+		TangramScene->addObject(SceneObjects::QUAD);
+	}
+	void cleanupScene()
+	{
+		delete TangramScene;
+		cleanupSceneObjects();
 	}
 }
 

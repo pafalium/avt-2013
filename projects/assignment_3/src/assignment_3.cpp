@@ -5,7 +5,7 @@
 // - Create the following changes to your scene, making it fully 3D:
 //   [DONE] - Extrude your TANs into the 3rd dimension. The TANs should have
 //     slightly different "heights".
-//   [NORMALS][DONE]- The new faces of each TAN should share the same hue as the 
+//   [NORMALS][PARTIAL]- The new faces of each TAN should share the same hue as the 
 //     original top face color but have different levels of saturation 
 //     and brightness (use an external app if needed).
 //   - The shape is now built vertically (i.e. rather than horizontally
@@ -110,13 +110,11 @@ Toggler *toggler;
 
 void drawScene()
 {
-	//ShaderPrograms::sendSharedMatBufMatrix(0, TestView);
-	//ShaderPrograms::sendSharedMatBufMatrix(1, Proj2);
 	ShaderPrograms::sendSharedMatBufMatrix(0, MyCamera->viewMatrix());
 	ShaderPrograms::sendSharedMatBufMatrix(1, MyCamera->projMatrix());
 
 	//draw background plane
-	ShaderPrograms::PassThroughProgram->use();
+	/*ShaderPrograms::PassThroughProgram->use();
 	ShaderPrograms::PassThroughProgram->sendUniformMat4(Uniforms::MATRIX, I);
 	ShaderPrograms::PassThroughProgram->sendUniformVec3(Uniforms::COLOR, BackColor);
 	Models::BackPlaneModel->drawModel();
@@ -133,6 +131,11 @@ void drawScene()
 		currProg->sendUniformVec3(Uniforms::COLOR, ObjectsColor);
 		wrlObj.drawRenderModel();
 	}
+	currProg->removeFromUse();*/
+
+	ShaderProgram *currProg = toggler->currentTangramShaderProgram();
+	currProg->use();
+	SingleScene::TangramScene->drawScene(currProg);
 	currProg->removeFromUse();
 
 	checkOpenGLError("ERROR: Could not draw scene.");
@@ -143,8 +146,8 @@ void drawScene()
 void cleanup()
 {
 	destroyShaderProgram();
+	SingleScene::cleanupScene();
 	Models::cleanupModels();
-	//cleanup toggling
 	delete toggler;
 	cleanupCamera();
 }
@@ -232,6 +235,7 @@ void mouseWheel(int wheel, int dir, int x, int y)
 void setupScenes()
 {
 	Models::setupModels();
+	SingleScene::setupScene();
 	Scenes::setupTangramConfigs();
 }
 
