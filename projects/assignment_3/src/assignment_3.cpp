@@ -225,18 +225,29 @@ void keyPressed(unsigned char key, int x, int y)
 }
 
 int LastMousePosX, LastMousePosY;
+bool MiddleDown;
 
 void mouse(int button, int state, int x, int y)
 {
+	if (button == GLUT_MIDDLE_BUTTON){
+		if (state == GLUT_DOWN)
+			MiddleDown = true;
+		else if (state == GLUT_UP)
+			MiddleDown = false;
+	}
 	LastMousePosX = x;
 	LastMousePosY = y;
 }
 
 void mouseMotion(int x, int y)
 {
-	
-	MyCamera->addLongitude(-x + LastMousePosX);
-	MyCamera->addLatitude(y - LastMousePosY);
+	if (MiddleDown){
+		MyCamera->moveCenterView(Vector3f(-(x - LastMousePosX)/10.0, -(-y + LastMousePosY)/10.0,0));
+	}
+	else {
+		MyCamera->addLongitude(-x + LastMousePosX);
+		MyCamera->addLatitude(y - LastMousePosY);
+	}
 	LastMousePosX = x;
 	LastMousePosY = y;
 }

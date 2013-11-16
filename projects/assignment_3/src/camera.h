@@ -78,9 +78,11 @@ struct Camera {
 	void addLatitude(float lat);
 	void addRadius(float rad);
 	// Pan the camera by the given vec3.
-	void moveCenter(Vector3f delta);
+	void moveCenter(const Vector3f &delta);
 	// Pan the camera by the given vec3 which is in view coordinates.
-	void moveCenterView(Vector3f viewDelta);
+	void moveCenterView(const Vector3f &viewDelta);
+	// Calculate the current camera position in world coordinates.
+	Vector3f currentPosition();
 	// Changes zoom of the current projection by the desired amount.
 	void addZoom(float zoom);
 };

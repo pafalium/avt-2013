@@ -172,15 +172,10 @@ const Matrix4 &Camera::viewMatrix()
 	if (!coordsChanged)
 		return viewMat;
 
-	float theta = deg2Rad(-lat+90.0f);
-	float phi = deg2Rad(lon);
-	float x, y, z;
-	x = rad * sin(theta) * cos(phi);
-	y = rad * sin(theta) * sin(phi);
-	z = rad * cos(theta);
+	Vector3f currPos = currentPosition();
 
 	coordsChanged = false;
-	viewMat = Matrices::lookAt(Vector3f(x, y, z), camCenter, camUp);
+	viewMat = Matrices::lookAt(currPos, camCenter, camUp);
 
 	return viewMat;
 }
@@ -215,15 +210,28 @@ void Camera::addRadius(float inc)
 		rad = -rad;//FIXME mwaahahaha
 }
 
-void Camera::moveCenter(Vector3f delta)
+void Camera::moveCenter(const Vector3f &delta)
 {
 	coordsChanged = true;
 	camCenter += delta;
 }
 
-void moveCenterView(Vector3f viewDelta)
+void Camera::moveCenterView(const Vector3f &viewDelta)
 {
-	//TODO
+	Matrix4 viewInv = Matrices::lookAtInverse(currentPosition(), camCenter, camUp);
+	Vector3f viewDeltaInWorldCoords = viewInv * viewDelta;
+	moveCenter(viewDeltaInWorldCoords);
+}
+
+Vector3f Camera::currentPosition()
+{
+	float theta = deg2Rad(-lat + 90.0f);
+	float phi = deg2Rad(lon);
+	float x, y, z;
+	x = camCenter.x() + rad * sin(theta) * cos(phi);
+	y = camCenter.y() + rad * sin(theta) * sin(phi);
+	z = camCenter.z() + rad * cos(theta);
+	return Vector3f(x, y, z);
 }
 
 void Camera::addZoom(float inc)

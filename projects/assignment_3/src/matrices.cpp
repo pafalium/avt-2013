@@ -67,6 +67,25 @@ namespace Matrices {
 
 		return rot * trans;
 	}
+	Matrix4 lookAtInverse(const Vector3f &eye, const Vector3f &center, const Vector3f &up)
+	{
+		Vector3f view = center - eye;
+		view.normalize();
+		Vector3f side = view.cross(up);
+		side.normalize();
+		Vector3f upNorm = side.cross(view);
+
+		std::vector<GLfloat> rotinvData =
+		{ side.x(), side.y(), side.z(), 0,
+		upNorm.x(), upNorm.y(), upNorm.z(), 0,
+		-view.x(), -view.y(), -view.z(), 0,
+		0, 0, 0, 1 };
+		Matrix4 rotinv(rotinvData);
+
+		Matrix4 transInv = translate(eye);
+
+		return transInv * rotinv;
+	}
 	Matrix4 orthoProj(GLfloat l, GLfloat r, GLfloat b, GLfloat t, GLfloat n, GLfloat f)
 	{
 		GLfloat rml = 1.0 / (r - l);
@@ -140,3 +159,11 @@ namespace Matrices {
 	}
 }
 
+const Vector3f operator *(const Matrix4 &mat, const Vector3f &vec)
+{
+	float x = vec.x() * mat.cell(0, 0) + vec.y()*mat.cell(0, 1) + vec.z()*mat.cell(0, 2);
+	float y = vec.x() * mat.cell(1, 0) + vec.y()*mat.cell(1, 1) + vec.z()*mat.cell(1, 2);
+	float z = vec.x() * mat.cell(2, 0) + vec.y()*mat.cell(2, 1) + vec.z()*mat.cell(2, 2);
+
+	return Vector3f(x, y, z);
+}
