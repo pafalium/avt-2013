@@ -5,6 +5,7 @@
 
 #include "RenderModel.h"
 #include "scene.h"
+#include "animation.h"
 #include "sceneConfigurations.h"
 
 class ModelLoader {
@@ -79,13 +80,29 @@ namespace SingleScene {
 			extern const std::string QUAD;
 		}
 	}
+	namespace Animations {
+		extern Animation *INIT, *MBT1, *MBT2, *MMT1, *MST1, *MST2, *MSQR, *MQUAD;
+		namespace Names {
+			extern const std::string INIT;
+			extern const std::string MBT1;
+			extern const std::string MBT2;
+			extern const std::string MMT1;
+			extern const std::string MST1;
+			extern const std::string MST2;
+			extern const std::string MSQR;
+			extern const std::string MQUAD;
+		}
+	}
 
 	extern Scene *TangramScene;
+	extern AnimationManager *TangramAnimManager;
 
 	void setupSceneObjects();
 	void cleanupSceneObjects();
 	void setupScene();
 	void cleanupScene();
+	void setupAnimations();
+	void cleanupAnimations();
 
 }
 

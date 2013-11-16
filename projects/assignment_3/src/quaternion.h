@@ -38,6 +38,7 @@ const Quaternion qConjugate(const Quaternion& q);
 const Quaternion qInverse(const Quaternion& q);
 const Quaternion qMultiply(const Quaternion& q, const float s);
 const Quaternion qMultiply(const Quaternion& q0, const Quaternion& q1);
+const Quaternion qLerp(const Quaternion& q0, const Quaternion& q1, float k);
 const Quaternion qSlerp(const Quaternion& q0, const Quaternion& q1, float k);
 const bool qEqual(const Quaternion& q0, const Quaternion& q1);
 //const void qPrint(const std::string& s, const Quaternion& q);

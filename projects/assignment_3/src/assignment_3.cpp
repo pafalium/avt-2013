@@ -28,7 +28,7 @@
 //     a response to pressing the key 'p'.
 //   - The scene starts with the 7 TANs in their original square 
 //     configuration, laying flat and horizontally on the surface.
-//   - Each time the 't' key is pressed, one of the TANs will move from 
+//   [IN PROGRESS][USING 'u'] - Each time the 't' key is pressed, one of the TANs will move from 
 //     its resting place to its position in your chosen shape, now 
 //     presented vertically.
 //
@@ -146,6 +146,7 @@ void drawScene()
 void cleanup()
 {
 	destroyShaderProgram();
+	SingleScene::cleanupAnimations();
 	SingleScene::cleanupScene();
 	Models::cleanupModels();
 	delete toggler;
@@ -186,6 +187,7 @@ void timer(int value)
 void lerpTestTimer(int val)
 {
 	Scenes::SqrFigTangramConfig.incrMSecsLoop(16);
+	SingleScene::TangramAnimManager->update(16);
 	glutTimerFunc(16, lerpTestTimer, 0);
 }
 
@@ -194,6 +196,9 @@ void keyPressed(unsigned char key, int x, int y)
 	switch (key){
 	case 't':
 		toggler->toggle();
+		break;
+	case 'u':
+		SingleScene::TangramAnimManager->activateAnimation(SingleScene::Animations::Names::MBT1);
 		break;
 	case 'q':
 		MyCamera->addRadius(-0.1f);
@@ -236,6 +241,7 @@ void setupScenes()
 {
 	Models::setupModels();
 	SingleScene::setupScene();
+	SingleScene::setupAnimations();
 	Scenes::setupTangramConfigs();
 }
 

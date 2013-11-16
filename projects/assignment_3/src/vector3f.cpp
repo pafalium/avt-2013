@@ -110,3 +110,12 @@ Vector3f Vector3f::cross(const Vector3f &other) const
 
 	return Vector3f(crossX, crossY, crossZ);
 }
+
+/////////////////////////////////////////////////////////////////
+const Vector3f vec3fLerp(const Vector3f &v1, const Vector3f &v2, float k)
+{
+	Vector3f result(0,0,0);
+	float k0 = 1.0f - k;
+	float k1 = k;
+	return v1*k0 + v2*k1;
+}

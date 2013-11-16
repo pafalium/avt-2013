@@ -63,6 +63,7 @@ namespace Models {
 
 }
 
+//TODO remove
 namespace Scenes {
 	namespace ObjectNames {
 		const std::string BIG_TRI_1 = "bgtri1";
@@ -163,7 +164,22 @@ namespace SingleScene {
 		}
 	}
 
+	namespace Animations {
+		Animation *INIT, *MBT1, *MBT2, *MMT1, *MST1, *MST2, *MSQR, *MQUAD;
+		namespace Names {
+			const std::string INIT("INIT");
+			const std::string MBT1("MBT1");
+			const std::string MBT2("MBT2");
+			const std::string MMT1("MMT1");
+			const std::string MST1("MST1");
+			const std::string MST2("MST2");
+			const std::string MSQR("MSQR");
+			const std::string MQUAD("MQUAD");
+		}
+	}
+
 	Scene *TangramScene;
+	AnimationManager *TangramAnimManager;
 
 	void setupSceneObjects()
 	{
@@ -212,6 +228,58 @@ namespace SingleScene {
 	{
 		delete TangramScene;
 		cleanupSceneObjects();
+	}
+	void setupAnimations()
+	{
+		TangramAnimManager = new AnimationManager(TangramScene);
+		Animations::INIT = new Animation(Animations::Names::INIT);
+		TangramAnimManager->addAnimation(Animations::INIT);
+		Animations::INIT->addObjectKeyFrame(SceneObjects::BT1, KeyFrame(0, SceneObjects::InitLoc::BIG_TRI_1, SceneObjects::InitRot::BIG_TRI_1));
+		Animations::INIT->addObjectKeyFrame(SceneObjects::BT2, KeyFrame(0, SceneObjects::InitLoc::BIG_TRI_2, SceneObjects::InitRot::BIG_TRI_2));
+		Animations::INIT->addObjectKeyFrame(SceneObjects::MT1, KeyFrame(0, SceneObjects::InitLoc::MED_TRI_1, SceneObjects::InitRot::MED_TRI_1));
+		Animations::INIT->addObjectKeyFrame(SceneObjects::ST1, KeyFrame(0, SceneObjects::InitLoc::SML_TRI_1, SceneObjects::InitRot::SML_TRI_1));
+		Animations::INIT->addObjectKeyFrame(SceneObjects::ST2, KeyFrame(0, SceneObjects::InitLoc::SML_TRI_2, SceneObjects::InitRot::SML_TRI_2));
+		Animations::INIT->addObjectKeyFrame(SceneObjects::SQR, KeyFrame(0, SceneObjects::InitLoc::SQR, SceneObjects::InitRot::SQR));
+		Animations::INIT->addObjectKeyFrame(SceneObjects::QUAD, KeyFrame(0, SceneObjects::InitLoc::QUAD, SceneObjects::InitRot::QUAD));
+
+		Animations::MBT1 = new Animation(Animations::Names::MBT1);
+		TangramAnimManager->addAnimation(Animations::MBT1);
+		Animations::MBT1->addObjectKeyFrame(SceneObjects::BT1, KeyFrame(0, SceneObjects::InitLoc::BIG_TRI_1, SceneObjects::InitRot::BIG_TRI_1));
+		Animations::MBT1->addObjectKeyFrame(SceneObjects::BT1, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(90,Vector3f(.577,.577,-.577))));
+
+		Animations::MBT2 = new Animation(Animations::Names::MBT2);
+		TangramAnimManager->addAnimation(Animations::MBT2);
+		Animations::MBT2->addObjectKeyFrame(SceneObjects::BT2, KeyFrame(0, SceneObjects::InitLoc::BIG_TRI_2, SceneObjects::InitRot::BIG_TRI_2));
+		Animations::MBT2->addObjectKeyFrame(SceneObjects::BT2, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(140, Vector3f(.377, -.655, .655))));
+
+		Animations::MMT1 = new Animation(Animations::Names::MMT1);
+		TangramAnimManager->addAnimation(Animations::MMT1);
+		Animations::MMT1->addObjectKeyFrame(SceneObjects::MT1, KeyFrame(0, SceneObjects::InitLoc::MED_TRI_1, SceneObjects::InitRot::MED_TRI_1));
+		Animations::MMT1->addObjectKeyFrame(SceneObjects::MT1, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(150, Vector3f(.281, -.679, -.679))));
+
+		Animations::MST1 = new Animation(Animations::Names::MST1);
+		TangramAnimManager->addAnimation(Animations::MST1);
+		Animations::MST1->addObjectKeyFrame(SceneObjects::ST1, KeyFrame(0, SceneObjects::InitLoc::SML_TRI_1, SceneObjects::InitRot::SML_TRI_1));
+		Animations::MST1->addObjectKeyFrame(SceneObjects::ST1, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(120, Vector3f(.577, .577, -.577))));
+
+		Animations::MST2 = new Animation(Animations::Names::MST2);
+		TangramAnimManager->addAnimation(Animations::MST2);
+		Animations::MST2->addObjectKeyFrame(SceneObjects::ST2, KeyFrame(0, SceneObjects::InitLoc::SML_TRI_2, SceneObjects::InitRot::SML_TRI_2));
+		Animations::MST2->addObjectKeyFrame(SceneObjects::ST2, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(180, Vector3f(0, -.707, .707))));
+
+		Animations::MSQR = new Animation(Animations::Names::MSQR);
+		TangramAnimManager->addAnimation(Animations::MSQR);
+		Animations::MSQR->addObjectKeyFrame(SceneObjects::SQR, KeyFrame(0, SceneObjects::InitLoc::SQR, SceneObjects::InitRot::SQR));
+		Animations::MSQR->addObjectKeyFrame(SceneObjects::SQR, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(90, Vector3f(1, 0,0))));
+
+		Animations::MQUAD = new Animation(Animations::Names::MQUAD);
+		TangramAnimManager->addAnimation(Animations::MQUAD);
+		Animations::MQUAD->addObjectKeyFrame(SceneObjects::QUAD, KeyFrame(0, SceneObjects::InitLoc::QUAD, SceneObjects::InitRot::QUAD));
+		Animations::MQUAD->addObjectKeyFrame(SceneObjects::QUAD, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(120, Vector3f(.577, .577, -.577))));
+	}
+	void cleanupAnimations()
+	{
+		delete TangramAnimManager;
 	}
 }
 

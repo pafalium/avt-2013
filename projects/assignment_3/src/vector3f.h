@@ -43,4 +43,6 @@ const Vector3f operator*(const GLfloat &scalar, const Vector3f &vec);
 const Vector3f operator-(const Vector3f &vec1, const Vector3f &vec2);
 const Vector3f operator+(const Vector3f &vec1, const Vector3f &vec2);
 
+const Vector3f vec3fLerp(const Vector3f &v1, const Vector3f &v2, float k);
+
 #endif
