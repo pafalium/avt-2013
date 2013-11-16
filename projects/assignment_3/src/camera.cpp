@@ -136,6 +136,8 @@ const Matrix4 &PerspectiveProjection::projMatrix()
 //	void addLongitude(float lon);
 //	void addLatitude(float lat);
 //	void addRadius(float rad);
+//	// Pan the camera by the given vector.
+//	void moveCenter(Vector3f delta);
 //	// Changes zoom of the current projection by the desired amount.
 //	void addZoom(float zoom);
 //};
@@ -211,6 +213,17 @@ void Camera::addRadius(float inc)
 	rad += inc;
 	if (rad < 0)
 		rad = -rad;//FIXME mwaahahaha
+}
+
+void Camera::moveCenter(Vector3f delta)
+{
+	coordsChanged = true;
+	camCenter += delta;
+}
+
+void moveCenterView(Vector3f viewDelta)
+{
+	//TODO
 }
 
 void Camera::addZoom(float inc)

@@ -30,6 +30,7 @@ typedef struct {
 const float qThreshold = (float)1.0e-5;
 const Quaternion qFromAngleAxis(float theta, Vector3f axis);
 const void qToAngleAxix(const Quaternion& q, float& theta, Vector3f& axis);
+const Quaternion qFromTwoVectors(Vector3f start, Vector3f finish);
 const void qClean(Quaternion& q);
 const float qQuadrance(const Quaternion& q);
 const float qNorm(const Quaternion& q);
@@ -43,4 +44,3 @@ const Quaternion qSlerp(const Quaternion& q0, const Quaternion& q1, float k);
 const bool qEqual(const Quaternion& q0, const Quaternion& q1);
 //const void qPrint(const std::string& s, const Quaternion& q);
 //const void qPrintAngleAxis(const std::string& s, const Quaternion& q);
-

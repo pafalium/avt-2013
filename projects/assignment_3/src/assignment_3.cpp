@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
 //
 // Assignment 3 consists in the following:
 //
@@ -186,19 +186,31 @@ void timer(int value)
 
 void lerpTestTimer(int val)
 {
-	Scenes::SqrFigTangramConfig.incrMSecsLoop(16);
+	//Scenes::SqrFigTangramConfig.incrMSecsLoop(16);
 	SingleScene::TangramAnimManager->update(16);
 	glutTimerFunc(16, lerpTestTimer, 0);
 }
 
+unsigned int NextAnim = 0;
+std::vector<const std::string *> AnimNames = 
+{&SingleScene::Animations::Names::INIT,
+&SingleScene::Animations::Names::MBT1,
+&SingleScene::Animations::Names::MBT2,
+&SingleScene::Animations::Names::MMT1,
+&SingleScene::Animations::Names::MST1,
+&SingleScene::Animations::Names::MST2,
+&SingleScene::Animations::Names::MQUAD,
+&SingleScene::Animations::Names::MSQR };
+
 void keyPressed(unsigned char key, int x, int y)
 {
 	switch (key){
+	//case 'u':
+	//	toggler->toggle();
+	//	break;
 	case 't':
-		toggler->toggle();
-		break;
-	case 'u':
-		SingleScene::TangramAnimManager->activateAnimation(SingleScene::Animations::Names::MBT1);
+		SingleScene::TangramAnimManager->activateAnimation(*AnimNames[NextAnim]);
+		NextAnim = (NextAnim + 1) % AnimNames.size();
 		break;
 	case 'q':
 		MyCamera->addRadius(-0.1f);
@@ -242,7 +254,7 @@ void setupScenes()
 	Models::setupModels();
 	SingleScene::setupScene();
 	SingleScene::setupAnimations();
-	Scenes::setupTangramConfigs();
+	//Scenes::setupTangramConfigs();
 }
 
 void setupToggling()

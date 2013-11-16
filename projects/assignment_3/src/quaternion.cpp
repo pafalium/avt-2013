@@ -2,6 +2,17 @@
 
 #include "quaternion.h"
 
+const Quaternion qFromTwoVectors(Vector3f start, Vector3f finish)
+{
+	Vector3f startn = start, finishn = finish;
+	startn.normalize(); finishn.normalize();
+
+	float angle = acos(startn.dot(finishn))*RADIANS_TO_DEGREES;
+	Vector3f axis = startn.cross(finishn);
+
+	return qFromAngleAxis(angle, axis);
+}
+
 const Quaternion qFromAngleAxis(float theta, Vector3f axis)
 {
 	Vector3f axisn = axis;

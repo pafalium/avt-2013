@@ -77,6 +77,10 @@ struct Camera {
 	// Latitude caped at -90,90.
 	void addLatitude(float lat);
 	void addRadius(float rad);
+	// Pan the camera by the given vec3.
+	void moveCenter(Vector3f delta);
+	// Pan the camera by the given vec3 which is in view coordinates.
+	void moveCenterView(Vector3f viewDelta);
 	// Changes zoom of the current projection by the desired amount.
 	void addZoom(float zoom);
 };

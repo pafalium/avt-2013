@@ -245,37 +245,37 @@ namespace SingleScene {
 		Animations::MBT1 = new Animation(Animations::Names::MBT1);
 		TangramAnimManager->addAnimation(Animations::MBT1);
 		Animations::MBT1->addObjectKeyFrame(SceneObjects::BT1, KeyFrame(0, SceneObjects::InitLoc::BIG_TRI_1, SceneObjects::InitRot::BIG_TRI_1));
-		Animations::MBT1->addObjectKeyFrame(SceneObjects::BT1, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(90,Vector3f(.577,.577,-.577))));
+		Animations::MBT1->addObjectKeyFrame(SceneObjects::BT1, KeyFrame(1000, Vector3f(.4287, .1295, .7489), qFromTwoVectors(Vector3f(0,0,1),Vector3f(0,-1,0))));
 
 		Animations::MBT2 = new Animation(Animations::Names::MBT2);
 		TangramAnimManager->addAnimation(Animations::MBT2);
 		Animations::MBT2->addObjectKeyFrame(SceneObjects::BT2, KeyFrame(0, SceneObjects::InitLoc::BIG_TRI_2, SceneObjects::InitRot::BIG_TRI_2));
-		Animations::MBT2->addObjectKeyFrame(SceneObjects::BT2, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(140, Vector3f(.377, -.655, .655))));
+		Animations::MBT2->addObjectKeyFrame(SceneObjects::BT2, KeyFrame(1000, Vector3f(.6712, .1295, 1.8844), qMultiply(qFromTwoVectors(Vector3f(0, 0, 1), Vector3f(0, -1, 0)), qFromAngleAxis(-150, Vector3f(0, 0, 1)))));
 
 		Animations::MMT1 = new Animation(Animations::Names::MMT1);
 		TangramAnimManager->addAnimation(Animations::MMT1);
 		Animations::MMT1->addObjectKeyFrame(SceneObjects::MT1, KeyFrame(0, SceneObjects::InitLoc::MED_TRI_1, SceneObjects::InitRot::MED_TRI_1));
-		Animations::MMT1->addObjectKeyFrame(SceneObjects::MT1, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(150, Vector3f(.281, -.679, -.679))));
+		Animations::MMT1->addObjectKeyFrame(SceneObjects::MT1, KeyFrame(1000, Vector3f(-.6960, .0995, .7013), qMultiply(qFromTwoVectors(Vector3f(0,0,1),Vector3f(0,-1,0)), qFromAngleAxis(135, Vector3f(0,0,1)))));
 
 		Animations::MST1 = new Animation(Animations::Names::MST1);
 		TangramAnimManager->addAnimation(Animations::MST1);
 		Animations::MST1->addObjectKeyFrame(SceneObjects::ST1, KeyFrame(0, SceneObjects::InitLoc::SML_TRI_1, SceneObjects::InitRot::SML_TRI_1));
-		Animations::MST1->addObjectKeyFrame(SceneObjects::ST1, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(120, Vector3f(.577, .577, -.577))));
+		Animations::MST1->addObjectKeyFrame(SceneObjects::ST1, KeyFrame(1000, Vector3f(-.5559, .1295, 1.6961), qMultiply(qFromTwoVectors(Vector3f(0, 0, 1), Vector3f(0, -1, 0)), qFromAngleAxis(90, Vector3f(0, 0, 1)))));
 
 		Animations::MST2 = new Animation(Animations::Names::MST2);
 		TangramAnimManager->addAnimation(Animations::MST2);
 		Animations::MST2->addObjectKeyFrame(SceneObjects::ST2, KeyFrame(0, SceneObjects::InitLoc::SML_TRI_2, SceneObjects::InitRot::SML_TRI_2));
-		Animations::MST2->addObjectKeyFrame(SceneObjects::ST2, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(180, Vector3f(0, -.707, .707))));
+		Animations::MST2->addObjectKeyFrame(SceneObjects::ST2, KeyFrame(1000, Vector3f(-1.5775, .1295, .6798), qMultiply(qFromTwoVectors(Vector3f(0, 0, 1), Vector3f(0, -1, 0)), qFromAngleAxis(90, Vector3f(0, 0, 1)))));
 
 		Animations::MSQR = new Animation(Animations::Names::MSQR);
 		TangramAnimManager->addAnimation(Animations::MSQR);
 		Animations::MSQR->addObjectKeyFrame(SceneObjects::SQR, KeyFrame(0, SceneObjects::InitLoc::SQR, SceneObjects::InitRot::SQR));
-		Animations::MSQR->addObjectKeyFrame(SceneObjects::SQR, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(90, Vector3f(1, 0,0))));
+		Animations::MSQR->addObjectKeyFrame(SceneObjects::SQR, KeyFrame(1000, Vector3f(-1.0775, .1295, 1.3467), qFromTwoVectors(Vector3f(0, 0, 1), Vector3f(0, -1, 0))));
 
 		Animations::MQUAD = new Animation(Animations::Names::MQUAD);
 		TangramAnimManager->addAnimation(Animations::MQUAD);
 		Animations::MQUAD->addObjectKeyFrame(SceneObjects::QUAD, KeyFrame(0, SceneObjects::InitLoc::QUAD, SceneObjects::InitRot::QUAD));
-		Animations::MQUAD->addObjectKeyFrame(SceneObjects::QUAD, KeyFrame(1000, Vector3f(.42872, -.32383, .9), qFromAngleAxis(120, Vector3f(.577, .577, -.577))));
+		Animations::MQUAD->addObjectKeyFrame(SceneObjects::QUAD, KeyFrame(1000, Vector3f(1.7814, .0795, 1.3581), qMultiply(qFromTwoVectors(Vector3f(0, 0, 1), Vector3f(0, -1, 0)), qFromAngleAxis(-90, Vector3f(0, 0, 1)))));
 	}
 	void cleanupAnimations()
 	{
